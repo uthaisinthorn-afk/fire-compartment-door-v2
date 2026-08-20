@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ตรวจเช็ก Fire Compartment Door</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<style>
+  :root{
+    --navy:#0e2a3d;
+    --navy-2:#123a52;
+    --teal:#0f7a72;
+    --teal-light:#e6f4f2;
+    --amber:#c8791a;
+    --amber-light:#fbeee0;
+    --red:#b7362f;
+    --red-light:#fbeceb;
+    --paper:#f7f5f0;
+    --line:#dcd8cd;
+    --ink:#1b1f22;
+    --muted:#6b7178;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Sarabun',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding-bottom:110px;
+  }
+  .topbar{
+    background:var(--navy);
+    color:#fff;
+    padding:16px 18px 14px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+  }
+  .topbar .eyebrow{
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    opacity:.65;
+    margin-bottom:2px;
+  }
+  .topbar h1{ font-size:17px; margin:0; font-weight:700; }
+  .wrap{max-width:640px;margin:0 auto;padding:16px;}
+
+  .picker-box{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+  .picker-box h2{margin:0 0 10px;font-size:15px;color:var(--navy);}
+  .picker-box input[type=text]{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:15px;margin-bottom:10px;
+  }
+  .search-results{max-height:340px;overflow-y:auto;border-top:1px solid var(--line);}
+  .search-item{
+    padding:11px 6px;border-bottom:1px solid #eee;
+    display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  }
+  .search-item:hover{background:var(--teal-light);}
+  .search-item .name{font-weight:600;font-size:14.5px;}
+  .search-item .meta{font-size:12px;color:var(--muted);margin-top:2px;}
+
+  .picker-filters{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .picker-filters select{
+    flex:1;min-width:110px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:13.5px;background:#fff;color:#1b1f22;
+  }
+  .scan-qr-btn{
+    width:100%;margin-top:10px;padding:12px;border:none;border-radius:12px;
+    background:var(--teal);color:#fff;font-family:inherit;font-weight:700;font-size:14.5px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+
+  .door-card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;
+    position:relative;
+  }
+  .door-card .change-link{
+    position:absolute;top:16px;right:16px;font-size:12.5px;color:var(--teal);
+    cursor:pointer;font-weight:600;
+  }
+  .door-card .tag{
+    display:inline-block;background:var(--teal-light);color:var(--teal);
+    font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:20px;margin:0 6px 8px 0;
+  }
+  .door-card h2{margin:6px 0 4px;font-size:20px;color:var(--navy);}
+  .door-card .sub{font-size:13px;color:var(--muted);margin-top:2px;}
+
+  .field-row{display:flex;gap:10px;margin-bottom:16px;}
+  .field-row > div{flex:1;}
+  .field-row label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:600;}
+  .field-row input{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;
+    font-family:inherit;font-size:14.5px;
+  }
+
+  .section{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;
+  }
+  .section .head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .section .num{
+    width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0;
+  }
+  .section h3{margin:0;font-size:14.5px;color:var(--navy);}
+
+  .toggle-pair{display:flex;gap:8px;margin-bottom:2px;}
+  .toggle-btn{
+    flex:1;padding:11px 6px;border:1.5px solid var(--line);border-radius:10px;background:#fff;
+    font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;
+    text-align:center;transition:.12s;
+  }
+  .toggle-btn.ok.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal);}
+  .toggle-btn.bad.active{border-color:var(--red);background:var(--red-light);color:var(--red);}
+
+  .reason-box{margin-top:10px;display:none;}
+  .reason-box.show{display:block;}
+  .reason-box textarea{
+    width:100%;border:1px solid var(--red);background:var(--red-light);border-radius:10px;
+    padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:56px;
+  }
+  .reason-box .hint{font-size:11.5px;color:var(--red);margin-top:4px;}
+
+  textarea.note{
+    width:100%;border:1px solid var(--line);border-radius:10px;
+    padding:12px;font-family:inherit;font-size:14px;min-height:70px;resize:vertical;
+  }
+
+  .item-photo-zone{
+    margin-top:12px;border:2px dashed var(--line);border-radius:12px;padding:12px;text-align:center;background:#fcfbf8;
+  }
+  .item-photo-zone.has-photo{padding:10px;}
+  .item-photo-zone .thumb{position:relative;width:100%;max-width:220px;margin:0 auto 10px;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .item-photo-zone .thumb img{width:100%;display:block;}
+  .item-photo-zone .thumb .rm{
+    position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;
+    background:rgba(0,0,0,.6);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:14px;cursor:pointer;line-height:1;
+  }
+  .photo-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--navy);color:#fff;border:none;border-radius:10px;
+    padding:12px 14px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  }
+  .photo-hint{font-size:11.5px;color:var(--muted);margin-top:6px;}
+
+  .footer-bar{
+    position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);
+    padding:12px 16px;box-shadow:0 -4px 14px rgba(0,0,0,.06);z-index:30;
+  }
+  .footer-bar .inner{max-width:640px;margin:0 auto;}
+  .submit-btn{
+    width:100%;padding:15px;border:none;border-radius:12px;background:var(--teal);color:#fff;
+    font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
+  }
+  .submit-btn:disabled{background:#a9b3b1;}
+  .status-line{font-size:12px;text-align:center;margin-top:6px;color:var(--muted);}
+
+  .toast{
+    position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;
+    padding:12px 20px;border-radius:10px;font-size:14px;z-index:50;box-shadow:0 6px 18px rgba(0,0,0,.2);
+    max-width:90%;text-align:center;
+  }
+  .toast.err{background:var(--red);}
+  .toast.ok{background:var(--teal);}
+
+  #sendOverlay{
+    position:fixed;inset:0;background:rgba(14,42,61,.92);z-index:900;
+    display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+    color:#fff;text-align:center;padding:24px;
+  }
+  #sendOverlay.show{display:flex;}
+  #sendOverlay .spinner{
+    width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.25);
+    border-top-color:#fff;animation:spin 0.8s linear infinite;
+  }
+  #sendOverlay .msg{font-size:16px;font-weight:700;}
+  #sendOverlay .sub{font-size:12.5px;opacity:.75;max-width:260px;}
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  #qrScanOverlay{
+    position:fixed;inset:0;background:#000;z-index:950;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+  }
+  #qrScanOverlay.show{display:flex;}
+  #qrScanOverlay video{width:100%;max-width:480px;aspect-ratio:1/1;object-fit:cover;border-radius:14px;}
+  #qrScanOverlay .scanHint{color:#fff;font-size:14px;margin-top:16px;text-align:center;padding:0 20px;}
+  #qrScanOverlay .scanClose{
+    margin-top:18px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);
+    border-radius:10px;padding:10px 24px;font-family:inherit;font-size:14px;cursor:pointer;
+  }
+  #qrScanOverlay .scanBox{position:relative;width:100%;max-width:480px;}
+  #qrScanOverlay .scanBox::before{
+    content:"";position:absolute;inset:12%;border:3px solid var(--teal);border-radius:16px;
+    box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;
+  }
+
+  .empty-hint{text-align:center;color:var(--muted);font-size:13px;padding:14px 0;}
+  a.dash-link{color:#fff;opacity:.7;font-size:12px;}
+
+  .map-list-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 6px;border-bottom:1px solid #eee;cursor:pointer;
+  }
+  .map-list-item:hover{background:var(--teal-light);}
+  .map-list-item .name{font-weight:600;font-size:14.5px;}
+  .map-list-item .go{color:var(--teal);font-size:13px;font-weight:700;}
+
+  .map-view{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px;}
+  .map-view .map-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .map-view .map-head h2{font-size:15px;margin:0;color:var(--navy);}
+  .map-view .back-link{font-size:12.5px;color:var(--teal);cursor:pointer;font-weight:600;}
+  .map-canvas{position:relative;width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .map-canvas img{width:100%;display:block;}
+  .map-pin{
+    position:absolute;transform:translate(-50%,-50%);
+    width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+    border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;
+  }
+  .map-pin:active{background:var(--navy);}
+  .map-hint{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="eyebrow">อาคารภูมิสิริมังคลานุสรณ์ · Fire Compartment Door</div>
+  <h1>แบบตรวจเช็ก Fire Compartment Door</h1>
+</div>
+
+<div id="lineBanner" style="display:none;background:#fff3cd;color:#7a5c00;padding:12px 16px;font-size:13.5px;line-height:1.6;border-bottom:1px solid #f0d999;">
+  📱 <b>กำลังเปิดผ่านแอป LINE</b> — กล้องถ่ายรูปอาจใช้งานไม่ได้ในโหมดนี้<br>
+  กรุณากดปุ่ม <b>⋯</b> (จุดสามจุด) ที่มุมขวาบน แล้วเลือก <b>"เปิดในเบราว์เซอร์"</b> ก่อนเริ่มถ่ายรูปหลักฐาน
+</div>
+
+<div class="wrap" id="app"></div>
+
+<div id="sendOverlay">
+  <div class="spinner"></div>
+  <div class="msg">กำลังส่งข้อมูล...</div>
+  <div class="sub">กรุณาอย่าปิดหน้านี้ อาจใช้เวลาสักครู่ถ้าสัญญาณอินเทอร์เน็ตช้า</div>
+</div>
+
+<div id="qrScanOverlay">
+  <div class="scanBox">
+    <video id="qrVideo" autoplay playsinline muted></video>
+  </div>
+  <div class="scanHint" id="qrScanHint">ส่องกล้องไปที่ QR code หน้าประตู</div>
+  <button type="button" class="scanClose" id="qrScanCloseBtn">✕ ปิดกล้อง</button>
+</div>
+
+<script>
+if (/\bLine\b/i.test(navigator.userAgent)) {
+  document.getElementById("lineBanner").style.display = "block";
+}
+</script>
+
+<script>
+const DOORS = [{"id": 1, "code": "FCD-M/1", "floor": "MZ", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 2, "code": "FCD-M/2", "floor": "MZ", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 3, "code": "FCD-1/1", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 4, "code": "FCD-1/2", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 5, "code": "FCD-1/3", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 6, "code": "FCD-1/4", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 7, "code": "FCD-1/5", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 8, "code": "FCD-1/6", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 9, "code": "FCD-1/7", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 10, "code": "FCD-2/1", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 11, "code": "FCD-2/2", "floor": "2", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 12, "code": "FCD-2/3", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 13, "code": "FCD-2/4", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 14, "code": "FCD-2/5", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 15, "code": "FCD-2/6", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 16, "code": "FCD-3/1", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 17, "code": "FCD-3/2", "floor": "3", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 18, "code": "FCD-3/3", "floor": "3", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 19, "code": "FCD-3/4", "floor": "3", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 20, "code": "FCD-3/5", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 21, "code": "FCD-3/6", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 22, "code": "FCD-3/7", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 23, "code": "FCD-3/8", "floor": "4", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 24, "code": "FCD-5/1", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 25, "code": "FCD-5/2", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 26, "code": "FCD-5/3", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 27, "code": "FCD-5/4", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 28, "code": "FCD-5/5", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 29, "code": "FCD-5/6", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 30, "code": "FCD-6/1", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 31, "code": "FCD-6/2", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 32, "code": "FCD-6/3", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 33, "code": "FCD-6/4", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 34, "code": "FCD-6/5", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 35, "code": "FCD-6/6", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 36, "code": "FCD-6/7", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 37, "code": "FCD-6/8", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 38, "code": "FCD-6/9", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 39, "code": "FCD-7/1", "floor": "7", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 40, "code": "FCD-7/2", "floor": "7", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 41, "code": "FCD-7/3", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 42, "code": "FCD-7/4", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 43, "code": "FCD-7/5", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 44, "code": "FCD-7/6", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 45, "code": "FCD-7/7", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 46, "code": "FCD-8/1", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 47, "code": "FCD-8/2", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 48, "code": "FCD-8/3", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 49, "code": "FCD-8/4", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 50, "code": "FCD-8/5", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 51, "code": "FCD-9/1", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 52, "code": "FCD-9/2", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 53, "code": "FCD-9/3", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 54, "code": "FCD-9/4", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 55, "code": "FCD-9/5", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 56, "code": "FCD-9/6", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 57, "code": "FCD-10/1", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 58, "code": "FCD-10/2", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 59, "code": "FCD-10/3", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 60, "code": "FCD-10/4", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 61, "code": "FCD-10/5", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 62, "code": "FCD-11/1", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 63, "code": "FCD-11/2", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 64, "code": "FCD-11/3", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 65, "code": "FCD-11/4", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 66, "code": "FCD-11/5", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 67, "code": "FCD-12/1", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 68, "code": "FCD-12/2", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 69, "code": "FCD-12/3", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 70, "code": "FCD-12/4", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 71, "code": "FCD-12/5", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 72, "code": "FCD-12/6", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 73, "code": "FCD-12/7", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 74, "code": "FCD-12/8", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 75, "code": "FCD-13/1", "floor": "13", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 76, "code": "FCD-13/2", "floor": "13", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 77, "code": "FCD-13/3", "floor": "13", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 78, "code": "FCD-13/4", "floor": "13", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 79, "code": "FCD-13/5", "floor": "13", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 80, "code": "FCD-14/1", "floor": "14", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 81, "code": "FCD-14/2", "floor": "14", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 82, "code": "FCD-14/3", "floor": "14", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 83, "code": "FCD-14/4", "floor": "14", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 84, "code": "FCD-15/1", "floor": "15", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 85, "code": "FCD-15/2", "floor": "15", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 86, "code": "FCD-15/3", "floor": "15", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 87, "code": "FCD-15/4", "floor": "15", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 88, "code": "FCD-15/5", "floor": "15", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 89, "code": "FCD-16/1", "floor": "16", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 90, "code": "FCD-16/2", "floor": "16", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 91, "code": "FCD-16/3", "floor": "16", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 92, "code": "FCD-16/4", "floor": "16", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 93, "code": "FCD-16/5", "floor": "16", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 94, "code": "FCD-17/1", "floor": "17", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 95, "code": "FCD-17/2", "floor": "17", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 96, "code": "FCD-17/3", "floor": "17", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 97, "code": "FCD-17/4", "floor": "17", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 98, "code": "FCD-17/5", "floor": "17", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 99, "code": "FCD-18/1", "floor": "18", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 100, "code": "FCD-18/2", "floor": "18", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 101, "code": "FCD-18/3", "floor": "18", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 102, "code": "FCD-18/4", "floor": "18", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 103, "code": "FCD-18/5", "floor": "18", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 104, "code": "FCD-19/1", "floor": "19", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 105, "code": "FCD-19/2", "floor": "19", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 106, "code": "FCD-19/3", "floor": "19", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 107, "code": "FCD-19/4", "floor": "19", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 108, "code": "FCD-19/5", "floor": "19", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 109, "code": "FCD-20/1", "floor": "20", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 110, "code": "FCD-20/2", "floor": "20", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 111, "code": "FCD-20/3", "floor": "20", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 112, "code": "FCD-20/4", "floor": "20", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 113, "code": "FCD-20/5", "floor": "20", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 114, "code": "FCD-21/1", "floor": "21", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 115, "code": "FCD-21/2", "floor": "21", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 116, "code": "FCD-21/3", "floor": "21", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 117, "code": "FCD-21/4", "floor": "21", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 118, "code": "FCD-21/5", "floor": "21", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 119, "code": "FCD-22/1", "floor": "22", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 120, "code": "FCD-22/2", "floor": "22", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 121, "code": "FCD-22/3", "floor": "22", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 122, "code": "FCD-22/4", "floor": "22", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 123, "code": "FCD-22/5", "floor": "22", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 124, "code": "FCD-23/1", "floor": "23", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 125, "code": "FCD-23/2", "floor": "23", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 126, "code": "FCD-23/3", "floor": "23", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 127, "code": "FCD-23/4", "floor": "23", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 128, "code": "FCD-23/5", "floor": "23", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 129, "code": "FCD-24/1", "floor": "24", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 130, "code": "FCD-24/2", "floor": "24", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 131, "code": "FCD-24/3", "floor": "24", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 132, "code": "FCD-24/4", "floor": "24", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 133, "code": "FCD-24/5", "floor": "24", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 134, "code": "FCD-25/1", "floor": "25", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 135, "code": "FCD-25/2", "floor": "25", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 136, "code": "FCD-25/3", "floor": "25", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 137, "code": "FCD-25/4", "floor": "25", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 138, "code": "FCD-25/5", "floor": "25", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 139, "code": "FCD-26/1", "floor": "26", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 140, "code": "FCD-26/2", "floor": "26", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 141, "code": "FCD-26/3", "floor": "26", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 142, "code": "FCD-26/4", "floor": "26", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 143, "code": "FCD-26/5", "floor": "26", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 144, "code": "FCD-27/1", "floor": "27", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 145, "code": "FCD-27/2", "floor": "27", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 146, "code": "FCD-27/3", "floor": "27", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 147, "code": "FCD-27/4", "floor": "27", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 148, "code": "FCD-27/5", "floor": "27", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 149, "code": "FCD-28/1", "floor": "28", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 150, "code": "FCD-28/2", "floor": "28", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 151, "code": "FCD-28/3", "floor": "28", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 152, "code": "FCD-28/4", "floor": "28", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 153, "code": "FCD-28/5", "floor": "28", "zone": "EC Zone C", "location": "โถงทางเดิน"}];
+
+// ---------- floor plan map mode ----------
+// เพิ่มผังชั้นอื่นได้โดยเพิ่ม key ใหม่ที่นี่ (floor -> {image, pins:[{code,xPct,yPct}]})
+// รูปผังให้วางไว้ในโฟลเดอร์ floorplans/ ข้างไฟล์นี้ (เช่น floorplans/floor_2.png)
+const FLOOR_MAPS = {
+  "1": {
+    image: "floorplans/floor_1.png",
+    pins: [
+      { code: "FCD-1/1", xPct: 42.10, yPct: 67.84 },
+      { code: "FCD-1/2", xPct: 52.50, yPct: 51.25 },
+      { code: "FCD-1/3", xPct: 54.27, yPct: 40.99 },
+      { code: "FCD-1/4", xPct: 67.66, yPct: 41.28 },
+      { code: "FCD-1/5", xPct: 52.18, yPct: 31.76 },
+      { code: "FCD-1/6", xPct: 64.11, yPct: 32.10 },
+      { code: "FCD-1/7", xPct: 63.15, yPct: 11.92 }
+    ]
+  },
+  "8": {
+    image: "floorplans/floor_8.png",
+    pins: [
+      { code: "FCD-8/1", xPct: 63.59, yPct: 42.62 },
+      { code: "FCD-8/2", xPct: 76.29, yPct: 42.39 },
+      { code: "FCD-8/3", xPct: 61.29, yPct: 33.32 },
+      { code: "FCD-8/4", xPct: 73.10, yPct: 33.18 },
+      { code: "FCD-8/5", xPct: 70.40, yPct: 14.28 }
+    ]
+  },
+  "9": {
+    image: "floorplans/floor_9.png",
+    pins: [
+      { code: "FCD-9/1", xPct: 54.31, yPct: 62.29 },
+      { code: "FCD-9/2", xPct: 56.01, yPct: 42.65 },
+      { code: "FCD-9/3", xPct: 68.99, yPct: 43.04 },
+      { code: "FCD-9/4", xPct: 53.67, yPct: 33.44 },
+      { code: "FCD-9/5", xPct: 65.32, yPct: 33.87 },
+      { code: "FCD-9/6", xPct: 62.70, yPct: 14.25 }
+    ]
+  },
+  "10": {
+    image: "floorplans/floor_10.png",
+    pins: [
+      { code: "FCD-10/1", xPct: 56.17, yPct: 42.42 },
+      { code: "FCD-10/2", xPct: 68.79, yPct: 42.05 },
+      { code: "FCD-10/3", xPct: 53.83, yPct: 33.38 },
+      { code: "FCD-10/4", xPct: 65.24, yPct: 33.15 },
+      { code: "FCD-10/5", xPct: 63.51, yPct: 14.54 }
+    ]
+  },
+  "11": {
+    image: "floorplans/floor_11.png",
+    pins: [
+      { code: "FCD-11/1", xPct: 41.57, yPct: 69.16 },
+      { code: "FCD-11/2", xPct: 55.97, yPct: 42.96 },
+      { code: "FCD-11/3", xPct: 69.44, yPct: 42.39 },
+      { code: "FCD-11/4", xPct: 54.19, yPct: 33.41 },
+      { code: "FCD-11/5", xPct: 63.47, yPct: 14.57 }
+    ]
+  },
+  "12": {
+    image: "floorplans/floor_12.png",
+    pins: [
+      { code: "FCD-12/1", xPct: 64.48, yPct: 12.80 },
+      { code: "FCD-12/2", xPct: 54.03, yPct: 33.15 },
+      { code: "FCD-12/3", xPct: 65.44, yPct: 32.98 },
+      { code: "FCD-12/4", xPct: 56.73, yPct: 42.56 },
+      { code: "FCD-12/5", xPct: 69.60, yPct: 42.53 },
+      { code: "FCD-12/6", xPct: 54.31, yPct: 52.11 },
+      { code: "FCD-12/7", xPct: 42.98, yPct: 55.70 },
+      { code: "FCD-12/8", xPct: 53.75, yPct: 67.22 }
+    ]
+  }
+};
+
+const CONFIG = {
+  // แก้ URL นี้เป็น Web App URL ที่ได้จากการ Deploy Google Apps Script (ดูไฟล์ fcd_apps_script.gs)
+  GAS_URL: "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
+  STORAGE_KEY: "fcd_records_v1"
+};
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function getRecords(){
+  try{ return JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY) || "[]"); }catch(e){ return []; }
+}
+
+function pruneSyncedPhotos(arr){
+  let changed = false;
+  arr.forEach(r => {
+    if (r.synced && r.items){
+      r.items.forEach(it => { if (it.photo){ it.photo = null; changed = true; } });
+    }
+  });
+  return changed;
+}
+
+function saveRecords(arr){
+  try{
+    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(arr));
+    return true;
+  }catch(e){
+    if (pruneSyncedPhotos(arr)){
+      try{
+        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(arr));
+        showToast("พื้นที่เก็บข้อมูลในเครื่องเต็ม — ล้างรูปเก่าที่ซิงค์แล้วออกให้อัตโนมัติ", "err");
+        return true;
+      }catch(e2){ }
+    }
+    console.error("บันทึกลง localStorage ไม่สำเร็จ", e);
+    return false;
+  }
+}
+
+function showToast(msg, type){
+  const t = document.createElement("div");
+  t.className = "toast" + (type ? " "+type : "");
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), type === "err" ? 6000 : 2600);
+}
+
+// ---------- compress photo to base64 jpeg ----------
+function fileToCompressedDataUrl(file, maxDim=480, quality=0.4){
+  const TARGET_BYTES = 55 * 1024;
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      const encode = (dim, q) => {
+        let w = img.width, h = img.height;
+        if (w > h && w > dim){ h = Math.round(h*dim/w); w = dim; }
+        else if (h > dim){ w = Math.round(w*dim/h); h = dim; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        return canvas.toDataURL("image/jpeg", q);
+      };
+      const estimateBytes = (dataUrl) => {
+        const b64 = dataUrl.split(",")[1] || "";
+        return Math.floor(b64.length * 3 / 4);
+      };
+      let dim = maxDim, q = quality;
+      let result = encode(dim, q);
+      while (estimateBytes(result) > TARGET_BYTES && q > 0.15){
+        q -= 0.08;
+        result = encode(dim, q);
+      }
+      while (estimateBytes(result) > TARGET_BYTES && dim > 240){
+        dim -= 60;
+        q = quality;
+        result = encode(dim, q);
+        while (estimateBytes(result) > TARGET_BYTES && q > 0.15){
+          q -= 0.08;
+          result = encode(dim, q);
+        }
+      }
+      resolve(result);
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ---------- checklist (fixed 8 items, 1 photo required per item) ----------
+const CHECK_ITEMS = [
+  { key: "hinge_seal",  title: "1. ตรวจเช็กบานพับและซีลประตู",
+    okLabel: "ปกติ", badLabel: "ชำรุด/ผิดปกติ",
+    placeholder: "ระบุอาการ เช่น บานพับหลวม/เป็นสนิม, ซีลฉีกขาด/หลุดร่อน..." },
+  { key: "magnet_pin",  title: "2. ตรวจเช็กชุดแม่เหล็กเดือยยึดประตู",
+    okLabel: "ปกติ", badLabel: "ชำรุด/ผิดปกติ",
+    placeholder: "ระบุอาการ เช่น แม่เหล็กดูดไม่ติด, เดือยยึดหลวม/หาย..." },
+  { key: "door_closer", title: "3. ตรวจเช็กโช๊คอัฟประตู",
+    okLabel: "ทำงานปกติ", badLabel: "ผิดปกติ/ชำรุด",
+    placeholder: "ระบุอาการ เช่น ปิดไม่สนิท, รั่วน้ำมัน, เสียงดัง..." },
+  { key: "open_close",  title: "4. ตรวจเช็กการปิด-เปิดประตู",
+    okLabel: "ปิด-เปิดคล่องปกติ", badLabel: "ติดขัด/ผิดปกติ",
+    placeholder: "ระบุอาการ เช่น เปิด-ปิดฝืด, เสียงดัง, ค้าง..." },
+  { key: "oil_stain",   title: "5. ตรวจเช็กคราบน้ำมันที่ประตู",
+    okLabel: "ไม่พบคราบน้ำมัน", badLabel: "พบคราบน้ำมัน",
+    placeholder: "ระบุตำแหน่ง/ลักษณะคราบน้ำมันที่พบ..." },
+  { key: "fire_seal",   title: "6. ตรวจเช็กคิ้วกันไฟ",
+    okLabel: "มีครบ ติดถูกตำแหน่ง", badLabel: "ไม่มี/ติดผิดตำแหน่ง",
+    placeholder: "ระบุตำแหน่งที่ขาดหรือติดผิดตำแหน่ง..." },
+  { key: "closer_arm",  title: "7. ตรวจเช็กก้านโช๊คอัฟตัวจัดลำดับการปิดประตู",
+    okLabel: "ปกติ", badLabel: "ชำรุด/หลวม",
+    placeholder: "ระบุอาการ เช่น ก้านหลวม/หลุด, จัดลำดับการปิดผิดปกติ..." },
+  { key: "door_latch",  title: "8. ตรวจเช็กสลักล็อกบานประตู",
+    okLabel: "ปกติ", badLabel: "ชำรุด/ล็อกไม่ได้",
+    placeholder: "ระบุอาการ เช่น สลักหลวม, ล็อกไม่เข้า, สนิมจับ..." }
+];
+
+// ---------- state ----------
+let currentDoor = null;
+let checks = {};
+let itemPhotos = {}; // key -> dataURL
+
+const params = new URLSearchParams(location.search);
+const doorIdParam = params.get("door");
+const mapFloorParam = params.get("map");
+
+function findDoor(id){
+  return DOORS.find(d => String(d.id) === String(id) || d.code === id);
+}
+
+function init(){
+  if (doorIdParam && findDoor(doorIdParam)){
+    currentDoor = findDoor(doorIdParam);
+    renderForm();
+  } else if (mapFloorParam && FLOOR_MAPS[mapFloorParam]){
+    renderFloorMap(mapFloorParam);
+  } else {
+    renderPicker();
+  }
+}
+
+function renderPicker(){
+  const app = document.getElementById("app");
+  const floors = [...new Set(DOORS.map(d=>d.floor))];
+  const zones = [...new Set(DOORS.map(d=>d.zone).filter(Boolean))];
+  app.innerHTML = `
+    <div class="picker-box">
+      <h2>เลือกบานประตูที่จะตรวจ</h2>
+      <button type="button" class="scan-qr-btn" id="scanQrBtn">📷 สแกน QR เพื่อเลือกประตู</button>
+      <div class="picker-filters">
+        <select id="floorFilterPicker"><option value="">ทุกชั้น</option>${floors.map(f=>`<option value="${f}">ชั้น ${f}</option>`).join("")}</select>
+        <select id="zoneFilterPicker"><option value="">ทุกโซน</option>${zones.map(z=>`<option value="${z}">${z}</option>`).join("")}</select>
+      </div>
+      <input type="text" id="searchInput" placeholder="พิมพ์รหัสประตู เช่น FCD-9/3 ...">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    ${renderMapListHtml()}
+    <div class="empty-hint">หรือกดปุ่ม "สแกน QR" ด้านบน เพื่อส่องกล้องไปที่ QR code หน้าประตูโดยตรง</div>
+  `;
+  const input = document.getElementById("searchInput");
+  const floorSel = document.getElementById("floorFilterPicker");
+  const zoneSel = document.getElementById("zoneFilterPicker");
+  const resultsEl = document.getElementById("searchResults");
+  function renderResults(list){
+    resultsEl.innerHTML = list.slice(0,80).map(d => `
+      <div class="search-item" data-id="${d.id}">
+        <div>
+          <div class="name">${d.code}</div>
+          <div class="meta">ชั้น ${d.floor}${d.zone ? " · "+d.zone : ""}${d.location ? " · "+d.location : ""}</div>
+        </div>
+      </div>
+    `).join("") || `<div class="empty-hint">ไม่พบประตูที่ค้นหา</div>`;
+    resultsEl.querySelectorAll(".search-item").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const id = el.getAttribute("data-id");
+        location.href = "?door="+id;
+      });
+    });
+  }
+  function applyFilters(){
+    const q = input.value.trim().toLowerCase();
+    const floor = floorSel.value;
+    const zone = zoneSel.value;
+    let list = DOORS;
+    if (floor) list = list.filter(d=>d.floor===floor);
+    if (zone) list = list.filter(d=>d.zone===zone);
+    if (q) list = list.filter(d => (d.code+" "+d.floor+" "+d.zone).toLowerCase().includes(q));
+    renderResults(list);
+  }
+  renderResults(DOORS);
+  input.addEventListener("input", applyFilters);
+  floorSel.addEventListener("change", applyFilters);
+  zoneSel.addEventListener("change", applyFilters);
+  document.getElementById("scanQrBtn").addEventListener("click", startQrScan);
+  document.querySelectorAll(".map-list-item").forEach(el=>{
+    el.addEventListener("click", ()=>{ location.href = "?map="+encodeURIComponent(el.getAttribute("data-floor")); });
+  });
+}
+
+function renderMapListHtml(){
+  const floors = Object.keys(FLOOR_MAPS);
+  if (!floors.length) return "";
+  return `
+    <div class="picker-box">
+      <h2>🗺️ โหมดแผนที่ (เลือกชั้นที่มีผัง)</h2>
+      ${floors.map(f => `
+        <div class="map-list-item" data-floor="${f}">
+          <span class="name">ชั้น ${f}</span>
+          <span class="go">ดูแผนที่ →</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderFloorMap(floor){
+  const app = document.getElementById("app");
+  const mapData = FLOOR_MAPS[floor];
+  app.innerHTML = `
+    <div class="map-view">
+      <div class="map-head">
+        <h2>🗺️ แผนที่ชั้น ${floor}</h2>
+        <span class="back-link" id="backToPickerBtn">← กลับ</span>
+      </div>
+      <div class="map-canvas">
+        <img src="${mapData.image}" alt="แผนผังชั้น ${floor}">
+        ${mapData.pins.map(p => `
+          <div class="map-pin" style="left:${p.xPct}%; top:${p.yPct}%;" data-code="${p.code}">${p.code.split("/")[1]||""}</div>
+        `).join("")}
+      </div>
+      <div class="map-hint">แตะจุดหมายเลขบนแผนที่เพื่อเปิดแบบตรวจเช็กของประตูบานนั้น</div>
+    </div>
+  `;
+  document.getElementById("backToPickerBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
+  app.querySelectorAll(".map-pin").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      const code = el.getAttribute("data-code");
+      if (findDoor(code)) location.href = "?door="+encodeURIComponent(code);
+    });
+  });
+}
+
+// ---------- QR scanner ----------
+let qrScanStream = null;
+let qrScanRAF = null;
+
+async function startQrScan(){
+  const overlay = document.getElementById("qrScanOverlay");
+  const video = document.getElementById("qrVideo");
+  const hint = document.getElementById("qrScanHint");
+  overlay.classList.add("show");
+  hint.textContent = "กำลังเปิดกล้อง...";
+  try{
+    qrScanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = qrScanStream;
+    await video.play();
+    hint.textContent = "ส่องกล้องไปที่ QR code หน้าประตู";
+    scanQrFrame();
+  }catch(e){
+    hint.textContent = "เปิดกล้องไม่ได้ (" + e.message + ") กรุณาอนุญาตสิทธิ์กล้องในเบราว์เซอร์";
+  }
+}
+function stopQrScan(){
+  if (qrScanRAF) cancelAnimationFrame(qrScanRAF);
+  qrScanRAF = null;
+  if (qrScanStream){ qrScanStream.getTracks().forEach(t => t.stop()); qrScanStream = null; }
+  document.getElementById("qrScanOverlay").classList.remove("show");
+}
+function scanQrFrame(){
+  const video = document.getElementById("qrVideo");
+  if (!video.videoWidth){ qrScanRAF = requestAnimationFrame(scanQrFrame); return; }
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const code = jsQR(imageData.data, imageData.width, imageData.height);
+  if (code && code.data){ handleQrDecoded(code.data); return; }
+  qrScanRAF = requestAnimationFrame(scanQrFrame);
+}
+function handleQrDecoded(text){
+  let doorId = null;
+  try{
+    const url = new URL(text);
+    doorId = url.searchParams.get("door");
+  }catch(e){
+    doorId = text.trim();
+  }
+  stopQrScan();
+  if (doorId && findDoor(doorId)){
+    currentDoor = findDoor(doorId);
+    history.replaceState(null, "", "?door="+encodeURIComponent(currentDoor.code));
+    renderForm();
+    showToast("เข้าประตู \"" + currentDoor.code + "\" แล้ว", "ok");
+  } else {
+    showToast("QR นี้ไม่ตรงกับประตูในระบบ", "err");
+  }
+}
+document.getElementById("qrScanCloseBtn").addEventListener("click", stopQrScan);
+
+function toggleGroup(key, value){
+  checks[key] = value;
+  renderActiveStates();
+}
+function renderActiveStates(){
+  CHECK_ITEMS.forEach(item=>{
+    const key = item.key;
+    const okBtn = document.getElementById(key+"_ok");
+    const badBtn = document.getElementById(key+"_bad");
+    const reasonBox = document.getElementById(key+"_reasonbox");
+    if(!okBtn) return;
+    okBtn.classList.toggle("active", checks[key]==="ok");
+    badBtn.classList.toggle("active", checks[key]==="bad");
+    reasonBox.classList.toggle("show", checks[key]==="bad");
+  });
+}
+
+function renderForm(){
+  const d = currentDoor;
+  const app = document.getElementById("app");
+
+  const sectionsHtml = CHECK_ITEMS.map((item) => `
+    <div class="section">
+      <div class="head"><h3>${item.title}</h3></div>
+      <div class="toggle-pair">
+        <button type="button" class="toggle-btn ok" id="${item.key}_ok" onclick="toggleGroup('${item.key}','ok')">${item.okLabel}</button>
+        <button type="button" class="toggle-btn bad" id="${item.key}_bad" onclick="toggleGroup('${item.key}','bad')">${item.badLabel}</button>
+      </div>
+      <div class="reason-box" id="${item.key}_reasonbox">
+        <textarea id="${item.key}_reason" placeholder="${item.placeholder}"></textarea>
+        <div class="hint">กรุณาระบุเหตุผล</div>
+      </div>
+      <div class="item-photo-zone" id="${item.key}_photozone">
+        <div id="${item.key}_thumbwrap"></div>
+        <label class="photo-btn">
+          📷 ถ่ายรูปประกอบข้อนี้
+          <input type="file" accept="image/*" capture="environment" id="${item.key}_camera" style="display:none">
+        </label>
+        <div class="photo-hint">จำเป็นต้องแนบรูป 1 รูปต่อข้อ</div>
+      </div>
+    </div>
+  `).join("");
+
+  app.innerHTML = `
+    <div class="door-card">
+      <span class="change-link" id="changeDoorBtn">เปลี่ยนประตู</span>
+      <span class="tag">ชั้น ${d.floor}</span>${d.zone?`<span class="tag">${d.zone}</span>`:""}
+      <h2>${d.code}</h2>
+      <div class="sub">${d.location || "-"}</div>
+    </div>
+
+    <div class="field-row">
+      <div>
+        <label>วันที่ตรวจ</label>
+        <input type="date" id="inspDate" value="${todayStr()}">
+      </div>
+      <div>
+        <label>ผู้ตรวจ</label>
+        <input type="text" id="inspector" placeholder="ชื่อผู้ตรวจ" value="${localStorage.getItem('fcd_last_inspector')||''}">
+      </div>
+    </div>
+
+    ${sectionsHtml}
+
+    <div class="section">
+      <div class="head"><h3>หมายเหตุอื่นๆ</h3></div>
+      <textarea class="note" id="otherNote" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"></textarea>
+    </div>
+
+    <div class="footer-bar">
+      <div class="inner">
+        <button class="submit-btn" id="submitBtn">บันทึกผลตรวจ</button>
+        <div class="status-line" id="statusLine">ข้อมูลจะถูกเก็บไว้ในเครื่องก่อน แล้วซิงค์ขึ้นระบบเมื่อมีสัญญาณ</div>
+      </div>
+    </div>
+  `;
+  checks = {};
+  itemPhotos = {};
+  CHECK_ITEMS.forEach(item => { checks[item.key] = null; itemPhotos[item.key] = null; });
+  document.getElementById("changeDoorBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
+  document.getElementById("submitBtn").addEventListener("click", onSubmit);
+  CHECK_ITEMS.forEach(item=>{
+    document.getElementById(item.key+"_camera").addEventListener("change", (e)=>onItemPhotoSelected(e, item.key));
+  });
+}
+
+async function onItemPhotoSelected(e, key){
+  const file = (e.target.files || [])[0];
+  if (!file) return;
+  try{
+    const dataUrl = await fileToCompressedDataUrl(file);
+    itemPhotos[key] = dataUrl;
+    renderItemThumb(key);
+  }catch(err){ console.error(err); }
+  e.target.value = "";
+}
+function removeItemPhoto(key){
+  itemPhotos[key] = null;
+  renderItemThumb(key);
+}
+function renderItemThumb(key){
+  const wrap = document.getElementById(key+"_thumbwrap");
+  const zone = document.getElementById(key+"_photozone");
+  if (!wrap) return;
+  if (itemPhotos[key]){
+    wrap.innerHTML = `<div class="thumb"><img src="${itemPhotos[key]}"><div class="rm" onclick="removeItemPhoto('${key}')">✕</div></div>`;
+    zone.classList.add("has-photo");
+  } else {
+    wrap.innerHTML = "";
+    zone.classList.remove("has-photo");
+  }
+}
+
+function validate(){
+  for (const item of CHECK_ITEMS){
+    const key = item.key;
+    if (!checks[key]){
+      showToast("กรุณาติ๊กสถานะให้ครบทุกข้อ", "err");
+      return false;
+    }
+    if (checks[key] === "bad"){
+      const reasonEl = document.getElementById(key+"_reason");
+      if (!reasonEl.value.trim()){
+        showToast("กรุณาระบุเหตุผลในข้อที่ไม่ผ่าน", "err");
+        reasonEl.focus();
+        return false;
+      }
+    }
+    if (!itemPhotos[key]){
+      showToast("กรุณาแนบรูปถ่ายให้ครบทุกข้อ", "err");
+      document.getElementById(key+"_photozone").scrollIntoView({behavior:"smooth", block:"center"});
+      return false;
+    }
+  }
+  return true;
+}
+
+async function onSubmit(){
+  if (!validate()) return;
+  const inspector = document.getElementById("inspector").value.trim();
+  if (!inspector){ showToast("กรุณาระบุชื่อผู้ตรวจ", "err"); return; }
+  localStorage.setItem("fcd_last_inspector", inspector);
+
+  const itemsResult = CHECK_ITEMS.map(item => ({
+    key: item.key,
+    title: item.title,
+    status: checks[item.key],
+    reason: document.getElementById(item.key+"_reason") ? document.getElementById(item.key+"_reason").value.trim() : "",
+    photo: itemPhotos[item.key]
+  }));
+
+  const record = {
+    localId: "r"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    doorId: currentDoor.id,
+    doorCode: currentDoor.code,
+    floor: currentDoor.floor,
+    zone: currentDoor.zone,
+    location: currentDoor.location,
+    inspDate: document.getElementById("inspDate").value,
+    inspector: inspector,
+    items: itemsResult,
+    note: document.getElementById("otherNote").value.trim(),
+    submittedAt: new Date().toISOString(),
+    synced: false
+  };
+
+  const records = getRecords();
+  records.push(record);
+  const saved = saveRecords(records);
+  if (!saved){
+    showToast("บันทึกไม่สำเร็จ พื้นที่เก็บข้อมูลในเครื่องเต็ม กรุณาแจ้งผู้ดูแลระบบ", "err");
+    return;
+  }
+
+  document.getElementById("sendOverlay").classList.add("show");
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+  document.getElementById("statusLine").textContent = "บันทึกลงเครื่องแล้ว กำลังพยายามซิงค์ขึ้นระบบ...";
+
+  const synced = await trySync(record);
+  document.getElementById("sendOverlay").classList.remove("show");
+  if (synced){
+    showToast("บันทึกและซิงค์ขึ้นระบบสำเร็จ", "ok");
+  } else {
+    const errMsg = window.__lastSyncError ? (" (" + window.__lastSyncError + ")") : "";
+    showToast("บันทึกลงเครื่องแล้ว (ยังไม่ซิงค์" + errMsg + ")", "err");
+  }
+  setTimeout(()=>{ location.href = location.pathname; }, 600);
+}
+
+async function trySync(record){
+  if (!CONFIG.GAS_URL || CONFIG.GAS_URL.indexOf("PASTE_YOUR") === 0) return false;
+  try{
+    await fetch(CONFIG.GAS_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify(record)
+    });
+    markSynced(record.localId);
+    return true;
+  }catch(e){
+    console.error("sync error:", e);
+    window.__lastSyncError = (e && e.message) ? e.message : String(e);
+    return false;
+  }
+}
+function markSynced(localId){
+  const records = getRecords();
+  const rec = records.find(r=>r.localId===localId);
+  if (rec){
+    rec.synced = true;
+    if (rec.items) rec.items.forEach(it => it.photo = null);
+    saveRecords(records);
+  }
+}
+
+async function retryPendingSync(){
+  const records = getRecords();
+  if (pruneSyncedPhotos(records)) saveRecords(records);
+  if (!CONFIG.GAS_URL || CONFIG.GAS_URL.indexOf("PASTE_YOUR") === 0) return;
+  const pending = getRecords().filter(r=>!r.synced);
+  for (const rec of pending){ await trySync(rec); }
+}
+
+init();
+retryPendingSync();
+</script>
+</body>
+</html>
