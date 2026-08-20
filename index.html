@@ -343,7 +343,7 @@ const FLOOR_MAPS = {
 
 const CONFIG = {
   // แก้ URL นี้เป็น Web App URL ที่ได้จากการ Deploy Google Apps Script (ดูไฟล์ fcd_apps_script.gs)
-  GAS_URL: "https://script.google.com/macros/s/AKfycbwCspchsmdJdYlQPU_bT4pg6In5tGgZeSjG5TZDdrvd67yS_4z_IQyNbGB4AvWaJvlH/exec",
+  GAS_URL: "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
   STORAGE_KEY: "fcd_records_v1"
 };
 
@@ -392,8 +392,8 @@ function showToast(msg, type){
 }
 
 // ---------- compress photo to base64 jpeg ----------
-function fileToCompressedDataUrl(file, maxDim=480, quality=0.4){
-  const TARGET_BYTES = 55 * 1024;
+function fileToCompressedDataUrl(file, maxDim=360, quality=0.35){
+  const TARGET_BYTES = 35 * 1024;
   return new Promise((resolve, reject)=>{
     const img = new Image();
     const reader = new FileReader();
@@ -419,8 +419,8 @@ function fileToCompressedDataUrl(file, maxDim=480, quality=0.4){
         q -= 0.08;
         result = encode(dim, q);
       }
-      while (estimateBytes(result) > TARGET_BYTES && dim > 240){
-        dim -= 60;
+      while (estimateBytes(result) > TARGET_BYTES && dim > 180){
+        dim -= 40;
         q = quality;
         result = encode(dim, q);
         while (estimateBytes(result) > TARGET_BYTES && q > 0.15){
