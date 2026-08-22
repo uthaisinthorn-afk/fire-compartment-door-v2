@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>ตรวจเช็ก Fire Compartment Door</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -343,7 +346,7 @@ const FLOOR_MAPS = {
 
 const CONFIG = {
   // แก้ URL นี้เป็น Web App URL ที่ได้จากการ Deploy Google Apps Script (ดูไฟล์ fcd_apps_script.gs)
-  GAS_URL: "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE",
+  GAS_URL: "https://script.google.com/macros/s/AKfycbytuDfSoZb1rAq2gtqOr5uA6AkhYv7ivxB_kY7UwKtCreS2mb3HzGoCNN3gWz5AQrbs/exec",
   STORAGE_KEY: "fcd_records_v1"
 };
 
@@ -504,6 +507,7 @@ function renderPicker(){
     </div>
     ${renderMapListHtml()}
     <div class="empty-hint">หรือกดปุ่ม "สแกน QR" ด้านบน เพื่อส่องกล้องไปที่ QR code หน้าประตูโดยตรง</div>
+    <div style="text-align:center;font-size:10.5px;color:#bbb;margin-top:18px;">เวอร์ชันแอพ: 2026-08-21-r4</div>
   `;
   const input = document.getElementById("searchInput");
   const floorSel = document.getElementById("floorFilterPicker");
