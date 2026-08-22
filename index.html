@@ -270,7 +270,7 @@ if (/\bLine\b/i.test(navigator.userAgent)) {
 </script>
 
 <script>
-const DOORS = [{"id": 1, "code": "FCD-M/1", "floor": "MZ", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 2, "code": "FCD-M/2", "floor": "MZ", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 3, "code": "FCD-1/1", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 4, "code": "FCD-1/2", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 5, "code": "FCD-1/3", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 6, "code": "FCD-1/4", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 7, "code": "FCD-1/5", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 8, "code": "FCD-1/6", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 9, "code": "FCD-1/7", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 10, "code": "FCD-2/1", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 11, "code": "FCD-2/2", "floor": "2", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 12, "code": "FCD-2/3", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 13, "code": "FCD-2/4", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 14, "code": "FCD-2/5", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 15, "code": "FCD-2/6", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 16, "code": "FCD-3/1", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 17, "code": "FCD-3/2", "floor": "3", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 18, "code": "FCD-3/3", "floor": "3", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 19, "code": "FCD-3/4", "floor": "3", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 20, "code": "FCD-3/5", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 21, "code": "FCD-3/6", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 22, "code": "FCD-3/7", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 23, "code": "FCD-3/8", "floor": "4", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 24, "code": "FCD-5/1", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 25, "code": "FCD-5/2", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 26, "code": "FCD-5/3", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 27, "code": "FCD-5/4", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 28, "code": "FCD-5/5", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 29, "code": "FCD-5/6", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 30, "code": "FCD-6/1", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 31, "code": "FCD-6/2", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 32, "code": "FCD-6/3", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 33, "code": "FCD-6/4", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 34, "code": "FCD-6/5", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 35, "code": "FCD-6/6", "floor": "6", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 36, "code": "FCD-6/7", "floor": "6", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 37, "code": "FCD-6/8", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 38, "code": "FCD-6/9", "floor": "6", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 39, "code": "FCD-7/1", "floor": "7", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 40, "code": "FCD-7/2", "floor": "7", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 41, "code": "FCD-7/3", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 42, "code": "FCD-7/4", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 43, "code": "FCD-7/5", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 44, "code": "FCD-7/6", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 45, "code": "FCD-7/7", "floor": "7", "zone": "", "location": "แผนกผ่าตัด"}, {"id": 46, "code": "FCD-8/1", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 47, "code": "FCD-8/2", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 48, "code": "FCD-8/3", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 49, "code": "FCD-8/4", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 50, "code": "FCD-8/5", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 51, "code": "FCD-9/1", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 52, "code": "FCD-9/2", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 53, "code": "FCD-9/3", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 54, "code": "FCD-9/4", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 55, "code": "FCD-9/5", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 56, "code": "FCD-9/6", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 57, "code": "FCD-10/1", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 58, "code": "FCD-10/2", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 59, "code": "FCD-10/3", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 60, "code": "FCD-10/4", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 61, "code": "FCD-10/5", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 62, "code": "FCD-11/1", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 63, "code": "FCD-11/2", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 64, "code": "FCD-11/3", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 65, "code": "FCD-11/4", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 66, "code": "FCD-11/5", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 67, "code": "FCD-12/1", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 68, "code": "FCD-12/2", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 69, "code": "FCD-12/3", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 70, "code": "FCD-12/4", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 71, "code": "FCD-12/5", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 72, "code": "FCD-12/6", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 73, "code": "FCD-12/7", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 74, "code": "FCD-12/8", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 75, "code": "FCD-13/1", "floor": "13", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 76, "code": "FCD-13/2", "floor": "13", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 77, "code": "FCD-13/3", "floor": "13", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 78, "code": "FCD-13/4", "floor": "13", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 79, "code": "FCD-13/5", "floor": "13", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 80, "code": "FCD-14/1", "floor": "14", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 81, "code": "FCD-14/2", "floor": "14", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 82, "code": "FCD-14/3", "floor": "14", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 83, "code": "FCD-14/4", "floor": "14", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 84, "code": "FCD-15/1", "floor": "15", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 85, "code": "FCD-15/2", "floor": "15", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 86, "code": "FCD-15/3", "floor": "15", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 87, "code": "FCD-15/4", "floor": "15", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 88, "code": "FCD-15/5", "floor": "15", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 89, "code": "FCD-16/1", "floor": "16", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 90, "code": "FCD-16/2", "floor": "16", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 91, "code": "FCD-16/3", "floor": "16", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 92, "code": "FCD-16/4", "floor": "16", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 93, "code": "FCD-16/5", "floor": "16", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 94, "code": "FCD-17/1", "floor": "17", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 95, "code": "FCD-17/2", "floor": "17", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 96, "code": "FCD-17/3", "floor": "17", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 97, "code": "FCD-17/4", "floor": "17", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 98, "code": "FCD-17/5", "floor": "17", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 99, "code": "FCD-18/1", "floor": "18", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 100, "code": "FCD-18/2", "floor": "18", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 101, "code": "FCD-18/3", "floor": "18", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 102, "code": "FCD-18/4", "floor": "18", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 103, "code": "FCD-18/5", "floor": "18", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 104, "code": "FCD-19/1", "floor": "19", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 105, "code": "FCD-19/2", "floor": "19", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 106, "code": "FCD-19/3", "floor": "19", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 107, "code": "FCD-19/4", "floor": "19", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 108, "code": "FCD-19/5", "floor": "19", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 109, "code": "FCD-20/1", "floor": "20", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 110, "code": "FCD-20/2", "floor": "20", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 111, "code": "FCD-20/3", "floor": "20", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 112, "code": "FCD-20/4", "floor": "20", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 113, "code": "FCD-20/5", "floor": "20", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 114, "code": "FCD-21/1", "floor": "21", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 115, "code": "FCD-21/2", "floor": "21", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 116, "code": "FCD-21/3", "floor": "21", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 117, "code": "FCD-21/4", "floor": "21", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 118, "code": "FCD-21/5", "floor": "21", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 119, "code": "FCD-22/1", "floor": "22", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 120, "code": "FCD-22/2", "floor": "22", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 121, "code": "FCD-22/3", "floor": "22", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 122, "code": "FCD-22/4", "floor": "22", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 123, "code": "FCD-22/5", "floor": "22", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 124, "code": "FCD-23/1", "floor": "23", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 125, "code": "FCD-23/2", "floor": "23", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 126, "code": "FCD-23/3", "floor": "23", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 127, "code": "FCD-23/4", "floor": "23", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 128, "code": "FCD-23/5", "floor": "23", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 129, "code": "FCD-24/1", "floor": "24", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 130, "code": "FCD-24/2", "floor": "24", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 131, "code": "FCD-24/3", "floor": "24", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 132, "code": "FCD-24/4", "floor": "24", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 133, "code": "FCD-24/5", "floor": "24", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 134, "code": "FCD-25/1", "floor": "25", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 135, "code": "FCD-25/2", "floor": "25", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 136, "code": "FCD-25/3", "floor": "25", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 137, "code": "FCD-25/4", "floor": "25", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 138, "code": "FCD-25/5", "floor": "25", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 139, "code": "FCD-26/1", "floor": "26", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 140, "code": "FCD-26/2", "floor": "26", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 141, "code": "FCD-26/3", "floor": "26", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 142, "code": "FCD-26/4", "floor": "26", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 143, "code": "FCD-26/5", "floor": "26", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 144, "code": "FCD-27/1", "floor": "27", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 145, "code": "FCD-27/2", "floor": "27", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 146, "code": "FCD-27/3", "floor": "27", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 147, "code": "FCD-27/4", "floor": "27", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 148, "code": "FCD-27/5", "floor": "27", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 149, "code": "FCD-28/1", "floor": "28", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 150, "code": "FCD-28/2", "floor": "28", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 151, "code": "FCD-28/3", "floor": "28", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 152, "code": "FCD-28/4", "floor": "28", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 153, "code": "FCD-28/5", "floor": "28", "zone": "EC Zone C", "location": "โถงทางเดิน"}];
+const DOORS = [{"code": "FCD-M/1", "floor": "MZ", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น MZ", "id": 1}, {"code": "FCD-M/2", "floor": "MZ", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น MZ", "id": 2}, {"code": "FCD-M/3", "floor": "MZ", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น MZ", "id": 3}, {"id": 4, "code": "FCD-1/1", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 5, "code": "FCD-1/2", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 6, "code": "FCD-1/3", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 7, "code": "FCD-1/4", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 8, "code": "FCD-1/5", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 9, "code": "FCD-1/6", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 10, "code": "FCD-1/7", "floor": "1", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 1"}, {"id": 11, "code": "FCD-2/1", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 12, "code": "FCD-2/2", "floor": "2", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 13, "code": "FCD-2/3", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 14, "code": "FCD-2/4", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 15, "code": "FCD-2/5", "floor": "2", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 16, "code": "FCD-2/6", "floor": "2", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 17, "code": "FCD-3/1", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 18, "code": "FCD-3/2", "floor": "3", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 19, "code": "FCD-3/3", "floor": "3", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 20, "code": "FCD-3/4", "floor": "3", "zone": "PC Zone D", "location": "โถงทางเดิน"}, {"id": 21, "code": "FCD-3/5", "floor": "3", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 22, "code": "FCD-3/6", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 23, "code": "FCD-3/7", "floor": "4", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 24, "code": "FCD-3/8", "floor": "4", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 25, "code": "FCD-5/1", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 26, "code": "FCD-5/2", "floor": "5", "zone": "PC Zone A", "location": "โถงทางเดิน"}, {"id": 27, "code": "FCD-5/3", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 28, "code": "FCD-5/4", "floor": "5", "zone": "PC Zone B", "location": "โถงทางเดิน"}, {"id": 29, "code": "FCD-5/5", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 30, "code": "FCD-5/6", "floor": "5", "zone": "EC Zone C", "location": "โถงทางเดิน"}, {"id": 31, "code": "FCD-6/1", "floor": "6", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 6"}, {"id": 32, "code": "FCD-6/2", "floor": "6", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 6"}, {"id": 33, "code": "FCD-6/3", "floor": "6", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 6"}, {"id": 34, "code": "FCD-6/4", "floor": "6", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 6"}, {"id": 35, "code": "FCD-7/1", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 36, "code": "FCD-7/2", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 37, "code": "FCD-7/3", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 38, "code": "FCD-7/4", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 39, "code": "FCD-7/5", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 40, "code": "FCD-7/6", "floor": "7", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 7"}, {"id": 41, "code": "FCD-8/1", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 42, "code": "FCD-8/2", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 43, "code": "FCD-8/3", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 44, "code": "FCD-8/4", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 45, "code": "FCD-8/5", "floor": "8", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 8"}, {"id": 46, "code": "FCD-9/1", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 47, "code": "FCD-9/2", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 48, "code": "FCD-9/3", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 49, "code": "FCD-9/4", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 50, "code": "FCD-9/5", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 51, "code": "FCD-9/6", "floor": "9", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 9"}, {"id": 52, "code": "FCD-10/1", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 53, "code": "FCD-10/2", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 54, "code": "FCD-10/3", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 55, "code": "FCD-10/4", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 56, "code": "FCD-10/5", "floor": "10", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 10"}, {"id": 57, "code": "FCD-11/1", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 58, "code": "FCD-11/2", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 59, "code": "FCD-11/3", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 60, "code": "FCD-11/4", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 61, "code": "FCD-11/5", "floor": "11", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 11"}, {"id": 62, "code": "FCD-12/1", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 63, "code": "FCD-12/2", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 64, "code": "FCD-12/3", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 65, "code": "FCD-12/4", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 66, "code": "FCD-12/5", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 67, "code": "FCD-12/6", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 68, "code": "FCD-12/7", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"id": 69, "code": "FCD-12/8", "floor": "12", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 12"}, {"code": "FCD-13/1", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 70}, {"code": "FCD-13/2", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 71}, {"code": "FCD-13/3", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 72}, {"code": "FCD-13/4", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 73}, {"code": "FCD-13/5", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 74}, {"code": "FCD-13/6", "floor": "13", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 13", "id": 75}, {"code": "FCD-14/1", "floor": "14", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 14", "id": 76}, {"code": "FCD-14/2", "floor": "14", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 14", "id": 77}, {"code": "FCD-14/3", "floor": "14", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 14", "id": 78}, {"code": "FCD-15/1", "floor": "15", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 15", "id": 79}, {"code": "FCD-15/2", "floor": "15", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 15", "id": 80}, {"code": "FCD-15/3", "floor": "15", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 15", "id": 81}, {"code": "FCD-16/1", "floor": "16", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 16", "id": 82}, {"code": "FCD-16/2", "floor": "16", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 16", "id": 83}, {"code": "FCD-16/3", "floor": "16", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 16", "id": 84}, {"code": "FCD-17/1", "floor": "17", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 17", "id": 85}, {"code": "FCD-17/2", "floor": "17", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 17", "id": 86}, {"code": "FCD-17/3", "floor": "17", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 17", "id": 87}, {"code": "FCD-18/1", "floor": "18", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 18", "id": 88}, {"code": "FCD-18/2", "floor": "18", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 18", "id": 89}, {"code": "FCD-18/3", "floor": "18", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 18", "id": 90}, {"code": "FCD-19/1", "floor": "19", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 19", "id": 91}, {"code": "FCD-19/2", "floor": "19", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 19", "id": 92}, {"code": "FCD-19/3", "floor": "19", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 19", "id": 93}, {"code": "FCD-20/1", "floor": "20", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 20", "id": 94}, {"code": "FCD-20/2", "floor": "20", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 20", "id": 95}, {"code": "FCD-20/3", "floor": "20", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 20", "id": 96}, {"code": "FCD-21/1", "floor": "21", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 21", "id": 97}, {"code": "FCD-21/2", "floor": "21", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 21", "id": 98}, {"code": "FCD-21/3", "floor": "21", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 21", "id": 99}, {"code": "FCD-22/1", "floor": "22", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 22", "id": 100}, {"code": "FCD-22/2", "floor": "22", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 22", "id": 101}, {"code": "FCD-22/3", "floor": "22", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 22", "id": 102}, {"code": "FCD-23/1", "floor": "23", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 23", "id": 103}, {"code": "FCD-23/2", "floor": "23", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 23", "id": 104}, {"code": "FCD-23/3", "floor": "23", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 23", "id": 105}, {"code": "FCD-24/1", "floor": "24", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 24", "id": 106}, {"code": "FCD-24/2", "floor": "24", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 24", "id": 107}, {"code": "FCD-24/3", "floor": "24", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 24", "id": 108}, {"code": "FCD-25/1", "floor": "25", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 25", "id": 109}, {"code": "FCD-25/2", "floor": "25", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 25", "id": 110}, {"code": "FCD-25/3", "floor": "25", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 25", "id": 111}, {"code": "FCD-26/1", "floor": "26", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 26", "id": 112}, {"code": "FCD-26/2", "floor": "26", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 26", "id": 113}, {"code": "FCD-26/3", "floor": "26", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 26", "id": 114}, {"code": "FCD-27/1", "floor": "27", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 27", "id": 115}, {"code": "FCD-27/2", "floor": "27", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 27", "id": 116}, {"code": "FCD-27/3", "floor": "27", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 27", "id": 117}, {"code": "FCD-28/1", "floor": "28", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 28", "id": 118}, {"code": "FCD-28/2", "floor": "28", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 28", "id": 119}, {"code": "FCD-28/3", "floor": "28", "zone": "", "location": "ดูตำแหน่งในแผนที่ชั้น 28", "id": 120}];
 
 // ---------- floor plan map mode ----------
 // เพิ่มผังชั้นอื่นได้โดยเพิ่ม key ใหม่ที่นี่ (floor -> {image, pins:[{code,xPct,yPct}]})
@@ -286,6 +286,165 @@ const FLOOR_MAPS = {
       { code: "FCD-1/5", xPct: 52.18, yPct: 31.76 },
       { code: "FCD-1/6", xPct: 64.11, yPct: 32.10 },
       { code: "FCD-1/7", xPct: 63.15, yPct: 11.92 }
+    ]
+  },
+  "6": {
+    image: "floorplans/floor_6.png",
+    pins: [
+      { code: "FCD-6/1", xPct: 60.35, yPct: 42.11 },
+      { code: "FCD-6/2", xPct: 74.02, yPct: 42.22 },
+      { code: "FCD-6/3", xPct: 59.17, yPct: 33.05 },
+      { code: "FCD-6/4", xPct: 68.00, yPct: 13.95 }
+    ]
+  },
+  "7": {
+    image: "floorplans/floor_7.png",
+    pins: [
+      { code: "FCD-7/1", xPct: 59.21, yPct: 51.58 },
+      { code: "FCD-7/2", xPct: 60.97, yPct: 42.23 },
+      { code: "FCD-7/3", xPct: 73.98, yPct: 42.42 },
+      { code: "FCD-7/4", xPct: 58.81, yPct: 33.22 },
+      { code: "FCD-7/5", xPct: 70.36, yPct: 33.09 },
+      { code: "FCD-7/6", xPct: 67.46, yPct: 14.09 }
+    ]
+  },
+  "17": {
+    image: "floorplans/floor_17.png",
+    pins: [
+      { code: "FCD-17/1", xPct: 42.55, yPct: 34.80 },
+      { code: "FCD-17/2", xPct: 44.27, yPct: 53.47 },
+      { code: "FCD-17/3", xPct: 43.07, yPct: 69.06 }
+    ]
+  },
+  "18": {
+    image: "floorplans/floor_18.png",
+    pins: [
+      { code: "FCD-18/1", xPct: 43.78, yPct: 34.47 },
+      { code: "FCD-18/2", xPct: 45.04, yPct: 52.99 },
+      { code: "FCD-18/3", xPct: 44.84, yPct: 68.42 }
+    ]
+  },
+  "19": {
+    image: "floorplans/floor_19.png",
+    pins: [
+      { code: "FCD-19/1", xPct: 43.81, yPct: 33.29 },
+      { code: "FCD-19/2", xPct: 45.28, yPct: 52.29 },
+      { code: "FCD-19/3", xPct: 44.27, yPct: 67.49 }
+    ]
+  },
+  "20": {
+    image: "floorplans/floor_20.png",
+    pins: [
+      { code: "FCD-20/1", xPct: 43.91, yPct: 34.11 },
+      { code: "FCD-20/2", xPct: 44.90, yPct: 52.54 },
+      { code: "FCD-20/3", xPct: 43.92, yPct: 67.65 }
+    ]
+  },
+  "21": {
+    image: "floorplans/floor_21.png",
+    pins: [
+      { code: "FCD-21/1", xPct: 47.33, yPct: 30.38 },
+      { code: "FCD-21/2", xPct: 45.09, yPct: 52.39 },
+      { code: "FCD-21/3", xPct: 44.78, yPct: 67.71 }
+    ]
+  },
+  "22": {
+    image: "floorplans/floor_22.png",
+    pins: [
+      { code: "FCD-22/1", xPct: 46.39, yPct: 30.78 },
+      { code: "FCD-22/2", xPct: 44.31, yPct: 53.05 },
+      { code: "FCD-22/3", xPct: 43.57, yPct: 68.05 }
+    ]
+  },
+  "23": {
+    image: "floorplans/floor_23.png",
+    pins: [
+      { code: "FCD-23/1", xPct: 46.99, yPct: 29.87 },
+      { code: "FCD-23/2", xPct: 44.49, yPct: 52.09 },
+      { code: "FCD-23/3", xPct: 44.04, yPct: 67.02 }
+    ]
+  },
+  "24": {
+    image: "floorplans/floor_24.png",
+    pins: [
+      { code: "FCD-24/1", xPct: 48.40, yPct: 30.47 },
+      { code: "FCD-24/2", xPct: 46.55, yPct: 52.60 },
+      { code: "FCD-24/3", xPct: 46.83, yPct: 67.59 }
+    ]
+  },
+  "25": {
+    image: "floorplans/floor_25.png",
+    pins: [
+      { code: "FCD-25/1", xPct: 47.80, yPct: 28.96 },
+      { code: "FCD-25/2", xPct: 45.36, yPct: 50.88 },
+      { code: "FCD-25/3", xPct: 44.63, yPct: 66.26 }
+    ]
+  },
+  "MZ": {
+    image: "floorplans/floor_MZ.png",
+    pins: [
+      { code: "FCD-M/1", xPct: 42.93, yPct: 52.69 },
+      { code: "FCD-M/2", xPct: 43.40, yPct: 58.59 },
+      { code: "FCD-M/3", xPct: 36.26, yPct: 86.35 }
+    ]
+  },
+  "26": {
+    image: "floorplans/floor_26.png",
+    pins: [
+      { code: "FCD-26/1", xPct: 48.20, yPct: 30.98 },
+      { code: "FCD-26/2", xPct: 46.39, yPct: 52.92 },
+      { code: "FCD-26/3", xPct: 45.98, yPct: 68.35 }
+    ]
+  },
+  "27": {
+    image: "floorplans/floor_27.png",
+    pins: [
+      { code: "FCD-27/1", xPct: 47.44, yPct: 31.13 },
+      { code: "FCD-27/2", xPct: 45.40, yPct: 52.85 },
+      { code: "FCD-27/3", xPct: 45.34, yPct: 68.28 }
+    ]
+  },
+  "28": {
+    image: "floorplans/floor_28.png",
+    pins: [
+      { code: "FCD-28/1", xPct: 47.64, yPct: 29.77 },
+      { code: "FCD-28/2", xPct: 45.13, yPct: 52.41 },
+      { code: "FCD-28/3", xPct: 44.38, yPct: 67.97 }
+    ]
+  },
+  "13": {
+    image: "floorplans/floor_13.png",
+    pins: [
+      { code: "FCD-13/1", xPct: 52.47, yPct: 51.53 },
+      { code: "FCD-13/2", xPct: 54.47, yPct: 41.85 },
+      { code: "FCD-13/3", xPct: 67.92, yPct: 41.73 },
+      { code: "FCD-13/4", xPct: 63.94, yPct: 32.45 },
+      { code: "FCD-13/5", xPct: 52.14, yPct: 32.89 },
+      { code: "FCD-13/6", xPct: 62.74, yPct: 11.95 }
+    ]
+  },
+  "14": {
+    image: "floorplans/floor_14.png",
+    pins: [
+      { code: "FCD-14/1", xPct: 46.01, yPct: 51.83 },
+      { code: "FCD-14/2", xPct: 46.28, yPct: 57.91 },
+      { code: "FCD-14/3", xPct: 44.36, yPct: 66.44 }
+    ]
+  },
+  "15": {
+    image: "floorplans/floor_15.png",
+    pins: [
+      { code: "FCD-15/1", xPct: 43.30, yPct: 33.69 },
+      { code: "FCD-15/2", xPct: 44.63, yPct: 52.08 },
+      { code: "FCD-15/3", xPct: 44.03, yPct: 67.36 }
+    ]
+  },
+  "16": {
+    image: "floorplans/floor_16.png",
+    pins: [
+      { code: "FCD-16/1", xPct: 42.05, yPct: 33.33 },
+      { code: "FCD-16/2", xPct: 44.39, yPct: 51.64 },
+      { code: "FCD-16/3", xPct: 44.11, yPct: 66.79 }
     ]
   },
   "8": {
