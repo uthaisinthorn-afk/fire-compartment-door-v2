@@ -167,6 +167,24 @@
     font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;
   }
   .submit-btn:disabled{background:#a9b3b1;}
+
+  .mode-tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .mode-tab{
+    flex:1;text-align:center;padding:11px 6px;border-radius:10px;border:1.5px solid var(--line);
+    background:#fff;color:var(--muted);font-size:13.5px;font-weight:700;cursor:pointer;
+  }
+  .mode-tab.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal);}
+
+  .maint-photo-row{display:flex;gap:10px;margin-bottom:2px;}
+  .maint-photo-slot{flex:1;}
+  .maint-photo-slot .item-photo-zone{margin-bottom:0;}
+  .maint-check-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .maint-check-row:last-child{border-bottom:none;}
+  .maint-check-row .label{font-size:14px;color:var(--navy);flex:1;}
+  .maint-toggle-pair{display:flex;gap:8px;flex-shrink:0;}
   .status-line{font-size:12px;text-align:center;margin-top:6px;color:var(--muted);}
 
   .toast{
@@ -233,12 +251,6 @@
   }
   .map-pin:active{background:var(--navy);}
   .map-hint{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
-  .map-download-btn{
-    display:block;width:100%;margin-top:12px;padding:11px;border:none;border-radius:8px;
-    background:var(--teal);color:#fff;font-size:14px;font-weight:700;cursor:pointer;
-  }
-  .map-download-btn:disabled{opacity:.6;cursor:default;}
-  .map-download-btn:active{background:var(--navy);}
 </style>
 </head>
 <body>
@@ -285,13 +297,13 @@ const FLOOR_MAPS = {
   "1": {
     image: "floorplans/floor_1.png",
     pins: [
-      { code: "FCD-1/1", xPct: 63.15, yPct: 11.92 },
+      { code: "FCD-1/1", xPct: 42.10, yPct: 67.84 },
       { code: "FCD-1/2", xPct: 52.50, yPct: 51.25 },
       { code: "FCD-1/3", xPct: 54.27, yPct: 40.99 },
       { code: "FCD-1/4", xPct: 67.66, yPct: 41.28 },
       { code: "FCD-1/5", xPct: 52.18, yPct: 31.76 },
       { code: "FCD-1/6", xPct: 64.11, yPct: 32.10 },
-      { code: "FCD-1/7", xPct: 42.10, yPct: 67.84 }
+      { code: "FCD-1/7", xPct: 63.15, yPct: 11.92 }
     ]
   },
   "6": {
@@ -488,42 +500,42 @@ const FLOOR_MAPS = {
   "2": {
     image: "floorplans/floor_2.png",
     pins: [
-      { code: "FCD-2/1", xPct: 45.55, yPct: 56.64 },
-      { code: "FCD-2/2", xPct: 56.90, yPct: 56.49 },
+      { code: "FCD-2/1", xPct: 63.90, yPct: 41.90 },
+      { code: "FCD-2/2", xPct: 77.43, yPct: 42.22 },
       { code: "FCD-2/3", xPct: 61.81, yPct: 53.00 },
-      { code: "FCD-2/4", xPct: 63.90, yPct: 41.90 },
-      { code: "FCD-2/5", xPct: 77.43, yPct: 42.22 }
+      { code: "FCD-2/4", xPct: 45.55, yPct: 56.64 },
+      { code: "FCD-2/5", xPct: 56.90, yPct: 56.49 }
     ]
   },
   "3": {
     image: "floorplans/floor_3.png",
     pins: [
-      { code: "FCD-3/1", xPct: 61.35, yPct: 32.75 },
-      { code: "FCD-3/2", xPct: 63.69, yPct: 41.82 },
-      { code: "FCD-3/3", xPct: 76.64, yPct: 42.38 },
-      { code: "FCD-3/4", xPct: 70.48, yPct: 13.88 },
+      { code: "FCD-3/1", xPct: 70.48, yPct: 13.88 },
+      { code: "FCD-3/2", xPct: 61.35, yPct: 32.75 },
+      { code: "FCD-3/3", xPct: 63.69, yPct: 41.82 },
+      { code: "FCD-3/4", xPct: 76.64, yPct: 42.38 },
       { code: "FCD-3/5", xPct: 61.80, yPct: 62.36 }
     ]
   },
   "4": {
     image: "floorplans/floor_4.png",
     pins: [
-      { code: "FCD-4/1", xPct: 60.27, yPct: 42.28 },
-      { code: "FCD-4/2", xPct: 73.47, yPct: 42.41 },
-      { code: "FCD-4/3", xPct: 58.88, yPct: 33.23 },
-      { code: "FCD-4/4", xPct: 69.43, yPct: 33.29 },
-      { code: "FCD-4/5", xPct: 67.52, yPct: 13.58 }
+      { code: "FCD-4/1", xPct: 67.52, yPct: 13.58 },
+      { code: "FCD-4/2", xPct: 58.88, yPct: 33.23 },
+      { code: "FCD-4/3", xPct: 69.43, yPct: 33.29 },
+      { code: "FCD-4/4", xPct: 60.27, yPct: 42.28 },
+      { code: "FCD-4/5", xPct: 73.47, yPct: 42.41 }
     ]
   },
   "5": {
     image: "floorplans/floor_5.png",
     pins: [
-      { code: "FCD-5/1", xPct: 59.77, yPct: 54.79 },
-      { code: "FCD-5/2", xPct: 61.32, yPct: 42.87 },
-      { code: "FCD-5/3", xPct: 74.27, yPct: 42.85 },
-      { code: "FCD-5/4", xPct: 70.85, yPct: 33.61 },
-      { code: "FCD-5/5", xPct: 59.23, yPct: 33.71 },
-      { code: "FCD-5/6", xPct: 68.67, yPct: 14.73 }
+      { code: "FCD-5/1", xPct: 68.67, yPct: 14.73 },
+      { code: "FCD-5/2", xPct: 59.23, yPct: 33.71 },
+      { code: "FCD-5/3", xPct: 70.85, yPct: 33.61 },
+      { code: "FCD-5/4", xPct: 61.32, yPct: 42.87 },
+      { code: "FCD-5/5", xPct: 74.27, yPct: 42.85 },
+      { code: "FCD-5/6", xPct: 59.77, yPct: 54.79 }
     ]
   },
   "8": {
@@ -704,10 +716,24 @@ const CHECK_ITEMS = [
     placeholder: "ระบุอาการ เช่น สลักหลวม, ล็อกไม่เข้า, สนิมจับ..." }
 ];
 
+// หัวข้อตรวจสำหรับหมวด "ซ่อมบำรุง / แจ้งข้อบกพร่อง" — สไตล์เดียวกับ FCD Defect Report
+// (ติ๊กผ่าน/ไม่ผ่านอย่างเดียว ไม่มีเหตุผล/รูปรายข้อ เพราะมีรูป Defect โดยรวมแทนแล้ว)
+const MAINT_ITEMS = [
+  { key: "hinge_seal",  label: "บานพับและซีลประตู" },
+  { key: "magnet_pin",  label: "ชุดแม่เหล็กเดือยยึดประตู" },
+  { key: "door_closer", label: "โช๊คอัฟประตู" },
+  { key: "open_close",  label: "การปิด-เปิดประตู" },
+  { key: "closer_arm",  label: "ก้านโช๊คอัฟตัวจัดลำดับการปิดประตู" },
+  { key: "fire_seal",   label: "คิ้วกันไฟ" }
+];
+
 // ---------- state ----------
 let currentDoor = null;
 let checks = {};
 let itemPhotos = {}; // key -> dataURL
+let currentMode = "inspection"; // "inspection" | "maintenance"
+let maintChecks = {};
+let maintPhotos = { photo1: null, photo2: null, positionPhoto: null };
 
 const params = new URLSearchParams(location.search);
 const doorIdParam = params.get("door");
@@ -819,7 +845,6 @@ function renderFloorMap(floor){
         `).join("")}
       </div>
       <div class="map-hint">แตะจุดหมายเลขบนแผนที่เพื่อเปิดแบบตรวจเช็กของประตูบานนั้น</div>
-      <button type="button" class="map-download-btn" id="downloadMapBtn">⬇ ดาวน์โหลดรูปแผนที่ (พร้อมเลข)</button>
     </div>
   `;
   document.getElementById("backToPickerBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
@@ -829,65 +854,6 @@ function renderFloorMap(floor){
       if (findDoor(code)) location.href = "?door="+encodeURIComponent(code);
     });
   });
-  document.getElementById("downloadMapBtn").addEventListener("click", ()=>{
-    downloadFloorMapImage(floor, mapData);
-  });
-}
-
-function downloadFloorMapImage(floor, mapData){
-  const btn = document.getElementById("downloadMapBtn");
-  const originalLabel = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "กำลังสร้างรูป...";
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.onload = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    const pinRadius = Math.max(canvas.width, canvas.height) * 0.018;
-    mapData.pins.forEach(p => {
-      const cx = (p.xPct / 100) * canvas.width;
-      const cy = (p.yPct / 100) * canvas.height;
-      const label = (p.code.split("/")[1] || "");
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, pinRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "#0f6b63";
-      ctx.fill();
-      ctx.lineWidth = pinRadius * 0.14;
-      ctx.strokeStyle = "#ffffff";
-      ctx.stroke();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.font = `bold ${Math.round(pinRadius * 1.15)}px Arial, sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(label, cx, cy + pinRadius * 0.05);
-    });
-
-    canvas.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `แผนที่ชั้น_${floor}.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      btn.disabled = false;
-      btn.textContent = originalLabel;
-    }, "image/png");
-  };
-  img.onerror = () => {
-    alert("ไม่สามารถโหลดรูปแผนที่เพื่อสร้างไฟล์ดาวน์โหลดได้");
-    btn.disabled = false;
-    btn.textContent = originalLabel;
-  };
-  img.src = mapData.image;
 }
 
 // ---------- QR scanner ----------
@@ -965,6 +931,27 @@ function renderActiveStates(){
   });
 }
 
+function renderModeTabsHtml(){
+  return `
+    <div class="mode-tabs">
+      <div class="mode-tab ${currentMode==='inspection'?'active':''}" id="tabInspection">ตรวจเช็กประจำ</div>
+      <div class="mode-tab ${currentMode==='maintenance'?'active':''}" id="tabMaintenance">แจ้งซ่อม / ข้อบกพร่อง</div>
+    </div>
+  `;
+}
+function bindModeTabs(){
+  document.getElementById("tabInspection").addEventListener("click", ()=>{
+    if (currentMode==="inspection") return;
+    currentMode = "inspection";
+    renderForm();
+  });
+  document.getElementById("tabMaintenance").addEventListener("click", ()=>{
+    if (currentMode==="maintenance") return;
+    currentMode = "maintenance";
+    renderMaintForm();
+  });
+}
+
 function renderForm(){
   const d = currentDoor;
   const app = document.getElementById("app");
@@ -999,6 +986,8 @@ function renderForm(){
       <div class="sub">${d.location || "-"}</div>
     </div>
 
+    ${renderModeTabsHtml()}
+
     <div class="field-row">
       <div>
         <label>วันที่ตรวจ</label>
@@ -1029,9 +1018,225 @@ function renderForm(){
   CHECK_ITEMS.forEach(item => { checks[item.key] = null; itemPhotos[item.key] = null; });
   document.getElementById("changeDoorBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
   document.getElementById("submitBtn").addEventListener("click", onSubmit);
+  bindModeTabs();
   CHECK_ITEMS.forEach(item=>{
     document.getElementById(item.key+"_camera").addEventListener("change", (e)=>onItemPhotoSelected(e, item.key));
   });
+}
+
+function renderMaintPhotoSlotHtml(slotKey, label){
+  return `
+    <div class="maint-photo-slot">
+      <div class="item-photo-zone" id="${slotKey}_photozone">
+        <div id="${slotKey}_thumbwrap"></div>
+        <label class="photo-btn">
+          📷 ${label}
+          <input type="file" accept="image/*" capture="environment" id="${slotKey}_camera" style="display:none">
+        </label>
+      </div>
+    </div>
+  `;
+}
+
+function renderMaintForm(){
+  const d = currentDoor;
+  const app = document.getElementById("app");
+
+  const checklistHtml = MAINT_ITEMS.map(item => `
+    <div class="maint-check-row">
+      <div class="label">${item.label}</div>
+      <div class="maint-toggle-pair">
+        <button type="button" class="toggle-btn ok" id="maint_${item.key}_ok" onclick="toggleMaintGroup('${item.key}','ok')">ใช้งานได้</button>
+        <button type="button" class="toggle-btn bad" id="maint_${item.key}_bad" onclick="toggleMaintGroup('${item.key}','bad')">ชำรุด</button>
+      </div>
+    </div>
+  `).join("");
+
+  app.innerHTML = `
+    <div class="door-card">
+      <span class="change-link" id="changeDoorBtn">เปลี่ยนประตู</span>
+      <span class="tag">ชั้น ${d.floor}</span>${d.zone?`<span class="tag">${d.zone}</span>`:""}
+      <h2>${d.code}</h2>
+      <div class="sub">${d.location || "-"}</div>
+    </div>
+
+    ${renderModeTabsHtml()}
+
+    <div class="field-row">
+      <div>
+        <label>วันที่ตรวจ</label>
+        <input type="date" id="inspDate" value="${todayStr()}">
+      </div>
+      <div>
+        <label>ผู้ตรวจสอบ</label>
+        <input type="text" id="inspector" placeholder="ชื่อผู้ตรวจสอบ" value="${localStorage.getItem('fcd_last_inspector')||''}">
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="head"><h3>1. รูปจุดที่พบข้อบกพร่อง และรายละเอียด</h3></div>
+      <div class="maint-photo-row">
+        ${renderMaintPhotoSlotHtml("photo1", "แนบรูปภาพที่ 1")}
+        ${renderMaintPhotoSlotHtml("photo2", "แนบรูปภาพที่ 2")}
+      </div>
+      <textarea class="note" id="defectDetail" placeholder="รายละเอียดข้อบกพร่องที่พบ..." style="margin-top:10px;"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="head"><h3>2. รูปตำแหน่งประตู (ภาพรวม) และหมายเหตุ</h3></div>
+      ${renderMaintPhotoSlotHtml("positionPhoto", "แนบรูปตำแหน่งประตู")}
+      <textarea class="note" id="positionNote" placeholder="ตำแหน่ง / หมายเหตุ..." style="margin-top:10px;"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="head"><h3>3. รายการตรวจสอบ</h3></div>
+      ${checklistHtml}
+    </div>
+
+    <div class="section">
+      <div class="head"><h3>4. การรับรอง</h3></div>
+      <div class="field-row">
+        <div>
+          <label>ผู้รับมอบงาน</label>
+          <input type="text" id="receiver" placeholder="ชื่อผู้รับมอบงาน">
+        </div>
+        <div>
+          <label>รับทราบโดย</label>
+          <input type="text" id="acknowledger" placeholder="ชื่อผู้รับทราบ">
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div class="inner">
+        <button class="submit-btn" id="submitBtn">บันทึกรายงานซ่อมบำรุง</button>
+        <div class="status-line" id="statusLine">ข้อมูลจะถูกเก็บไว้ในเครื่องก่อน แล้วซิงค์ขึ้นระบบเมื่อมีสัญญาณ</div>
+      </div>
+    </div>
+  `;
+  maintChecks = {};
+  maintPhotos = { photo1: null, photo2: null, positionPhoto: null };
+  MAINT_ITEMS.forEach(item => { maintChecks[item.key] = null; });
+  document.getElementById("changeDoorBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
+  document.getElementById("submitBtn").addEventListener("click", onMaintSubmit);
+  bindModeTabs();
+  ["photo1","photo2","positionPhoto"].forEach(slot=>{
+    document.getElementById(slot+"_camera").addEventListener("change", (e)=>onMaintPhotoSelected(e, slot));
+  });
+}
+
+function toggleMaintGroup(key, value){
+  maintChecks[key] = value;
+  const okBtn = document.getElementById("maint_"+key+"_ok");
+  const badBtn = document.getElementById("maint_"+key+"_bad");
+  okBtn.classList.toggle("active", value==="ok");
+  badBtn.classList.toggle("active", value==="bad");
+}
+
+async function onMaintPhotoSelected(e, slot){
+  const file = (e.target.files || [])[0];
+  if (!file) return;
+  try{
+    const dataUrl = await fileToCompressedDataUrl(file);
+    maintPhotos[slot] = dataUrl;
+    renderMaintThumb(slot);
+  }catch(err){ console.error(err); }
+  e.target.value = "";
+}
+function removeMaintPhoto(slot){
+  maintPhotos[slot] = null;
+  renderMaintThumb(slot);
+}
+function renderMaintThumb(slot){
+  const wrap = document.getElementById(slot+"_thumbwrap");
+  const zone = document.getElementById(slot+"_photozone");
+  if (!wrap) return;
+  if (maintPhotos[slot]){
+    wrap.innerHTML = `<div class="thumb"><img src="${maintPhotos[slot]}"><div class="rm" onclick="removeMaintPhoto('${slot}')">✕</div></div>`;
+    zone.classList.add("has-photo");
+  } else {
+    wrap.innerHTML = "";
+    zone.classList.remove("has-photo");
+  }
+}
+
+function validateMaint(){
+  for (const item of MAINT_ITEMS){
+    if (!maintChecks[item.key]){
+      showToast("กรุณาติ๊กสถานะให้ครบทุกข้อ", "err");
+      return false;
+    }
+  }
+  if (!maintPhotos.photo1 && !maintPhotos.photo2){
+    showToast("กรุณาแนบรูปจุดที่พบข้อบกพร่องอย่างน้อย 1 รูป", "err");
+    return false;
+  }
+  const detail = document.getElementById("defectDetail").value.trim();
+  if (!detail){
+    showToast("กรุณาระบุรายละเอียดข้อบกพร่อง", "err");
+    document.getElementById("defectDetail").focus();
+    return false;
+  }
+  return true;
+}
+
+async function onMaintSubmit(){
+  if (!validateMaint()) return;
+  const inspector = document.getElementById("inspector").value.trim();
+  if (!inspector){ showToast("กรุณาระบุชื่อผู้ตรวจสอบ", "err"); return; }
+  localStorage.setItem("fcd_last_inspector", inspector);
+
+  const maintItemsResult = MAINT_ITEMS.map(item => ({
+    key: item.key,
+    status: maintChecks[item.key]
+  }));
+
+  const record = {
+    recordType: "maintenance",
+    localId: "r"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+    doorId: currentDoor.id,
+    doorCode: currentDoor.code,
+    floor: currentDoor.floor,
+    zone: currentDoor.zone,
+    location: currentDoor.location,
+    inspDate: document.getElementById("inspDate").value,
+    inspector: inspector,
+    maintItems: maintItemsResult,
+    photo1: maintPhotos.photo1,
+    photo2: maintPhotos.photo2,
+    positionPhoto: maintPhotos.positionPhoto,
+    defectDetail: document.getElementById("defectDetail").value.trim(),
+    positionNote: document.getElementById("positionNote").value.trim(),
+    receiver: document.getElementById("receiver").value.trim(),
+    acknowledger: document.getElementById("acknowledger").value.trim(),
+    note: "",
+    submittedAt: new Date().toISOString(),
+    synced: false
+  };
+
+  const records = getRecords();
+  records.push(record);
+  const saved = saveRecords(records);
+  if (!saved){
+    showToast("บันทึกไม่สำเร็จ พื้นที่เก็บข้อมูลในเครื่องเต็ม กรุณาแจ้งผู้ดูแลระบบ", "err");
+    return;
+  }
+
+  document.getElementById("sendOverlay").classList.add("show");
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+  document.getElementById("statusLine").textContent = "บันทึกลงเครื่องแล้ว กำลังพยายามซิงค์ขึ้นระบบ...";
+
+  const synced = await trySync(record);
+  document.getElementById("sendOverlay").classList.remove("show");
+  if (synced){
+    showToast("บันทึกและซิงค์ขึ้นระบบสำเร็จ", "ok");
+  } else {
+    const errMsg = window.__lastSyncError ? (" (" + window.__lastSyncError + ")") : "";
+    showToast("บันทึกลงเครื่องแล้ว (ยังไม่ซิงค์" + errMsg + ")", "err");
+  }
+  setTimeout(()=>{ location.href = location.pathname; }, 600);
 }
 
 async function onItemPhotoSelected(e, key){
