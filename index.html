@@ -185,6 +185,15 @@
   .maint-check-row:last-child{border-bottom:none;}
   .maint-check-row .label{font-size:14px;color:var(--navy);flex:1;}
   .maint-toggle-pair{display:flex;gap:8px;flex-shrink:0;}
+
+  .maint-fix-row{padding:10px 0;border-bottom:1px solid var(--line);}
+  .maint-fix-row:last-child{border-bottom:none;}
+  .maint-fix-row .label{font-size:14px;color:var(--navy);margin-bottom:6px;font-weight:600;}
+  .maint-fix-input{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+    font-size:14px;font-family:inherit;box-sizing:border-box;
+  }
+  .maint-fix-input:focus{outline:none;border-color:var(--teal);}
   .status-line{font-size:12px;text-align:center;margin-top:6px;color:var(--muted);}
 
   .toast{
@@ -732,7 +741,6 @@ let currentDoor = null;
 let checks = {};
 let itemPhotos = {}; // key -> dataURL
 let currentMode = "inspection"; // "inspection" | "maintenance"
-let maintChecks = {};
 let maintPhotos = { photo1: null, photo2: null, positionPhoto: null };
 
 const params = new URLSearchParams(location.search);
@@ -1043,12 +1051,9 @@ function renderMaintForm(){
   const app = document.getElementById("app");
 
   const checklistHtml = MAINT_ITEMS.map(item => `
-    <div class="maint-check-row">
+    <div class="maint-fix-row">
       <div class="label">${item.label}</div>
-      <div class="maint-toggle-pair">
-        <button type="button" class="toggle-btn ok" id="maint_${item.key}_ok" onclick="toggleMaintGroup('${item.key}','ok')">ใช้งานได้</button>
-        <button type="button" class="toggle-btn bad" id="maint_${item.key}_bad" onclick="toggleMaintGroup('${item.key}','bad')">ชำรุด</button>
-      </div>
+      <input type="text" class="maint-fix-input" id="maint_${item.key}_note" placeholder="ระบุการแก้ไข (ถ้ามี)...">
     </div>
   `).join("");
 
@@ -1089,7 +1094,7 @@ function renderMaintForm(){
     </div>
 
     <div class="section">
-      <div class="head"><h3>3. รายการตรวจสอบ</h3></div>
+      <div class="head"><h3>3. รายการแก้ไข</h3></div>
       ${checklistHtml}
     </div>
 
@@ -1114,23 +1119,13 @@ function renderMaintForm(){
       </div>
     </div>
   `;
-  maintChecks = {};
   maintPhotos = { photo1: null, photo2: null, positionPhoto: null };
-  MAINT_ITEMS.forEach(item => { maintChecks[item.key] = null; });
   document.getElementById("changeDoorBtn").addEventListener("click", ()=>{ location.href = location.pathname; });
   document.getElementById("submitBtn").addEventListener("click", onMaintSubmit);
   bindModeTabs();
   ["photo1","photo2","positionPhoto"].forEach(slot=>{
     document.getElementById(slot+"_camera").addEventListener("change", (e)=>onMaintPhotoSelected(e, slot));
   });
-}
-
-function toggleMaintGroup(key, value){
-  maintChecks[key] = value;
-  const okBtn = document.getElementById("maint_"+key+"_ok");
-  const badBtn = document.getElementById("maint_"+key+"_bad");
-  okBtn.classList.toggle("active", value==="ok");
-  badBtn.classList.toggle("active", value==="bad");
 }
 
 async function onMaintPhotoSelected(e, slot){
@@ -1161,12 +1156,6 @@ function renderMaintThumb(slot){
 }
 
 function validateMaint(){
-  for (const item of MAINT_ITEMS){
-    if (!maintChecks[item.key]){
-      showToast("กรุณาติ๊กสถานะให้ครบทุกข้อ", "err");
-      return false;
-    }
-  }
   if (!maintPhotos.photo1 && !maintPhotos.photo2){
     showToast("กรุณาแนบรูปจุดที่พบข้อบกพร่องอย่างน้อย 1 รูป", "err");
     return false;
@@ -1188,7 +1177,7 @@ async function onMaintSubmit(){
 
   const maintItemsResult = MAINT_ITEMS.map(item => ({
     key: item.key,
-    status: maintChecks[item.key]
+    note: (document.getElementById("maint_"+item.key+"_note").value || "").trim()
   }));
 
   const record = {
