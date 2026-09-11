@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>แดชบอร์ด Fire Compartment Door</title>
+<title>แดชบอร์ดหัวหน้าช่าง — Fire Compartment Door</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -37,57 +37,93 @@
   .topbar{
     background:var(--navy);
     color:#fff;
-    padding:18px 18px 16px;
-    position:sticky;
-    top:0;
-    z-index:10;
+    padding:18px 20px 16px;
   }
-  .topbar h1{margin:0;font-size:17px;font-weight:700;}
+  .topbar h1{margin:0;font-size:18px;font-weight:700;}
   .topbar .sub{font-size:12.5px;color:#b9c6d1;margin-top:3px;}
-  .wrap{max-width:760px;margin:0 auto;padding:16px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:18px 20px;}
 
-  .card{
+  /* filter bar */
+  .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .filter-bar .today-btn{
+    background:var(--teal);color:#fff;border:none;border-radius:10px;
+    padding:10px 16px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;
+    display:flex;align-items:center;gap:6px;white-space:nowrap;
+  }
+  .filter-bar .today-btn.off{background:#fff;color:var(--ink);border:1px solid var(--line);}
+  .filter-bar select, .filter-bar input[type=date], .filter-bar input[type=text]{
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font-family:inherit;font-size:13.5px;background:#fff;color:var(--ink);
+  }
+  .filter-bar input[type=text]{flex:1;min-width:180px;}
+
+  /* KPI cards */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+  @media (max-width:720px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  .kpi-card{
     background:#fff;border:1px solid var(--line);border-radius:14px;
-    padding:16px 18px;margin-bottom:14px;
+    padding:18px 14px;text-align:center;
   }
+  .kpi-card .num{font-size:30px;font-weight:700;color:var(--ink);line-height:1.1;}
+  .kpi-card .label{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .kpi-card.passed .num{color:var(--teal);}
+  .kpi-card.issues .num{color:var(--red);}
+  .kpi-card.remaining .num{color:var(--amber);}
+
+  /* overdue banner */
+  .overdue-banner{
+    background:var(--red-light);border:1px solid #f0cfcb;border-radius:12px;
+    padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;
+    cursor:pointer;
+  }
+  .overdue-banner .left{display:flex;align-items:center;gap:10px;color:var(--red);font-weight:600;font-size:14px;}
+  .overdue-banner .count{
+    background:var(--red);color:#fff;border-radius:20px;padding:2px 10px;font-size:12.5px;font-weight:700;
+  }
+  .overdue-banner .toggle{color:var(--red);font-size:13px;font-weight:600;}
+  .overdue-list{display:none;margin-top:12px;border-top:1px solid #f0cfcb;padding-top:10px;}
+  .overdue-list.open{display:block;}
+  .overdue-row{
+    display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--ink);
+    border-bottom:1px solid #f3e1de;
+  }
+  .overdue-row:last-child{border-bottom:none;}
+  .overdue-row .meta{color:var(--muted);font-size:12px;}
+  .overdue-row .reason{color:var(--red);font-weight:600;font-size:12px;}
+
+  /* repair split */
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px;}
   .card h2{margin:0 0 12px;font-size:15px;color:var(--navy);font-weight:700;}
-  .card .note{font-size:12px;color:var(--muted);margin-top:2px;}
-
-  .kpi-row{display:flex;gap:10px;flex-wrap:wrap;}
-  .kpi{
-    flex:1;min-width:100px;background:var(--teal-light);border-radius:12px;
-    padding:12px 10px;text-align:center;
-  }
-  .kpi .num{font-size:24px;font-weight:700;color:var(--navy);line-height:1.1;}
-  .kpi .label{font-size:12px;color:var(--muted);margin-top:4px;}
-  .kpi.normal{background:var(--teal-light);}
-  .kpi.normal .num{color:var(--teal);}
-  .kpi.damaged{background:var(--amber-light);}
-  .kpi.damaged .num{color:var(--amber);}
-
-  .split-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
-  .split{
-    flex:1;min-width:140px;border-radius:12px;padding:12px 14px;border:1px solid transparent;
-  }
+  .split-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .split{flex:1;min-width:160px;border-radius:12px;padding:12px 14px;border:1px solid transparent;}
   .split.contractor{background:var(--red-light);border-color:#f0cfcb;}
   .split.stb{background:var(--blue-light);border-color:#c9dbf2;}
-  .split .tag{font-size:11.5px;font-weight:700;letter-spacing:.2px;margin-bottom:6px;display:inline-block;
-    padding:2px 8px;border-radius:20px;}
+  .split .tag{font-size:11.5px;font-weight:700;margin-bottom:6px;display:inline-block;padding:2px 8px;border-radius:20px;}
   .split.contractor .tag{background:var(--red);color:#fff;}
   .split.stb .tag{background:var(--blue);color:#fff;}
-  .split .big{font-size:26px;font-weight:700;}
+  .split .big{font-size:24px;font-weight:700;}
   .split.contractor .big{color:var(--red);}
   .split.stb .big{color:var(--blue);}
   .split .unit{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px;}
-  .split .sub{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .split .sub{font-size:12.5px;color:var(--muted);margin-top:6px;}
   .split .sub b{color:var(--ink);}
 
-  .legend{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.7;}
-  .legend .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;margin-right:3px;position:relative;top:-1px;}
-  .legend .dot.red{background:var(--red);}
-  .legend .dot.blue{background:var(--blue);}
+  /* recent list */
+  .list-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .list-head h2{margin:0;font-size:15px;color:var(--navy);font-weight:700;}
+  .list-head .badge{background:var(--teal-light);color:var(--teal);border-radius:20px;padding:2px 10px;font-size:12.5px;font-weight:700;}
+  .row-card{
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+  }
+  .row-card .name{font-weight:700;color:var(--navy);font-size:14.5px;}
+  .row-card .meta{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .row-tag{padding:4px 12px;border-radius:20px;font-size:12.5px;font-weight:700;white-space:nowrap;}
+  .row-tag.pass{background:var(--teal-light);color:var(--teal);}
+  .row-tag.fail{background:var(--red-light);color:var(--red);}
+  .empty-note{text-align:center;color:var(--muted);font-size:13px;padding:20px;}
 
-  .state{text-align:center;padding:40px 10px;color:var(--muted);font-size:14px;}
+  .state{text-align:center;padding:60px 10px;color:var(--muted);font-size:14px;}
   .state .spinner{
     width:26px;height:26px;border-radius:50%;border:3px solid var(--line);
     border-top-color:var(--teal);animation:spin .8s linear infinite;margin:0 auto 12px;
@@ -97,17 +133,14 @@
     margin-top:12px;background:var(--teal);color:#fff;border:none;border-radius:10px;
     padding:9px 18px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;
   }
-  .refresh-link{font-size:12.5px;color:var(--teal);cursor:pointer;font-weight:600;}
-  .card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
-  .card-head h2{margin:0;}
-  .updated{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+  .updated{font-size:11px;color:var(--muted);text-align:right;margin-bottom:10px;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <h1>🗺️ แดชบอร์ด Fire Compartment Door</h1>
-  <div class="sub">ภาพรวมการตรวจเช็กและงานซ่อม</div>
+  <h1>แดชบอร์ดหัวหน้าช่าง — สรุปผลตรวจ Fire Compartment Door</h1>
+  <div class="sub">อาคารภูมิสิริมังคลานุสรณ์</div>
 </div>
 
 <div class="wrap" id="app">
@@ -118,12 +151,13 @@
 </div>
 
 <script>
-// ใช้ GAS_URL เดียวกับแอพตรวจเช็กหลัก (index.html)
 const CONFIG = {
   GAS_URL: "https://script.google.com/macros/s/AKfycbytuDfSoZb1rAq2gtqOr5uA6AkhYv7ivxB_kY7UwKtCreS2mb3HzGoCNN3gWz5AQrbs/exec"
 };
 
 const app = document.getElementById("app");
+let DATA = null;
+let showTodayOnly = false;
 
 function renderError(msg){
   app.innerHTML = `
@@ -136,65 +170,144 @@ function renderError(msg){
 }
 
 function fmt(n){ return (n===undefined||n===null) ? "-" : n.toLocaleString("th-TH"); }
+function fmtDateTime(iso){
+  if (!iso) return "-";
+  const d = new Date(iso);
+  return d.toLocaleDateString("th-TH") + " " + d.toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"});
+}
+function isToday(iso){
+  if (!iso) return false;
+  const d = new Date(iso), now = new Date();
+  return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth() && d.getDate()===now.getDate();
+}
+
+function toggleOverdue(){
+  const el = document.getElementById("overdueList");
+  const arrow = document.getElementById("overdueArrow");
+  el.classList.toggle("open");
+  arrow.textContent = el.classList.contains("open") ? "▲" : "▼";
+}
+
+function toggleToday(){
+  showTodayOnly = !showTodayOnly;
+  renderAll();
+}
+
+function applyFilters(){
+  renderAll();
+}
+
+function renderAll(){
+  if (!DATA) return;
+  const floor = document.getElementById("floorFilter") ? document.getElementById("floorFilter").value : "";
+  const zone = document.getElementById("zoneFilter") ? document.getElementById("zoneFilter").value : "";
+  const q = document.getElementById("searchBox") ? document.getElementById("searchBox").value.trim().toLowerCase() : "";
+
+  let list = DATA.recent.slice();
+  if (showTodayOnly) list = list.filter(r => isToday(r.timestamp));
+  if (floor) list = list.filter(r => r.floor === floor);
+  if (zone) list = list.filter(r => r.zone === zone);
+  if (q) list = list.filter(r => (r.code+" "+r.floor+" "+r.zone+" "+r.inspector).toLowerCase().includes(q));
+
+  document.getElementById("recentListWrap").innerHTML = list.length
+    ? list.map(r => `
+      <div class="row-card">
+        <div>
+          <div class="name">${r.code}</div>
+          <div class="meta">ชั้น ${r.floor}${r.zone?" · โซน "+r.zone:""} · ผู้ตรวจ: ${r.inspector||"-"} · ${fmtDateTime(r.timestamp)}</div>
+        </div>
+        <div class="row-tag ${r.status==='ผ่าน'?'pass':'fail'}">${r.status}</div>
+      </div>
+    `).join("")
+    : `<div class="empty-note">ไม่พบรายการที่ตรงกับตัวกรอง</div>`;
+
+  document.getElementById("recentCount").textContent = list.length;
+}
 
 function renderDashboard(data){
-  const s = data.summary || data; // เผื่อ endpoint ส่ง summary ตรงๆ โดยไม่ห่อ key summary
-  const total = s.totalDoors || 0;
-  const normal = s.normalDoors || 0;
-  const damaged = s.damagedDoors || 0;
-  const totalItems = s.totalItems || 0;
-  const contractorItems = s.contractorItems || 0;
-  const stbItems = s.stbItems || 0;
-  const doorsNeedContractor = s.doorsNeedContractor || 0;
-  const doorsStbOnly = s.doorsStbOnly || 0;
-  const now = new Date().toLocaleString("th-TH");
+  DATA = data;
+  const k = data.kpis || {};
+  const s = data.repairSplit || {};
+  const overdue = data.overdue || { count:0, days:30, list:[] };
+  const floors = data.floors || [];
+  const zones = Array.from(new Set((data.recent||[]).map(r=>r.zone).filter(Boolean)));
 
   app.innerHTML = `
-    <div class="card">
-      <div class="card-head">
-        <h2>ภาพรวมจำนวนบาน</h2>
-        <span class="refresh-link" onclick="loadDashboard()">↻ รีเฟรช</span>
+    <div class="updated">อัปเดตล่าสุด: ${fmtDateTime(data.meta && data.meta.updatedAt)}</div>
+
+    <div class="filter-bar">
+      <button class="today-btn ${showTodayOnly?'':'off'}" id="todayBtn" onclick="toggleToday()">📅 วันนี้เท่านั้น</button>
+      <select id="floorFilter" onchange="applyFilters()">
+        <option value="">ทุกชั้น</option>
+        ${floors.map(f=>`<option value="${f}">ชั้น ${f}</option>`).join("")}
+      </select>
+      <select id="zoneFilter" onchange="applyFilters()">
+        <option value="">ทุกโซน</option>
+        ${zones.map(z=>`<option value="${z}">${z}</option>`).join("")}
+      </select>
+      <input type="text" id="searchBox" placeholder="ค้นหารหัสประตู..." oninput="applyFilters()">
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="num">${fmt(k.total)}</div>
+        <div class="label">ประตูทั้งหมด (ตามตัวครอบ)</div>
       </div>
-      <div class="kpi-row">
-        <div class="kpi">
-          <div class="num">${fmt(total)}</div>
-          <div class="label">มีข้อมูลตรวจแล้ว (บาน)</div>
-        </div>
-        <div class="kpi normal">
-          <div class="num">${fmt(normal)}</div>
-          <div class="label">ปกติ</div>
-        </div>
-        <div class="kpi damaged">
-          <div class="num">${fmt(damaged)}</div>
-          <div class="label">ชำรุด</div>
-        </div>
+      <div class="kpi-card passed">
+        <div class="num">${fmt(k.passed)}</div>
+        <div class="label">ผ่าน (สะสมล่าสุดต่อบาน)</div>
       </div>
-      <div class="updated">อัปเดตล่าสุด: ${now}</div>
+      <div class="kpi-card issues">
+        <div class="num">${fmt(k.issues)}</div>
+        <div class="label">พบปัญหา (สะสมล่าสุดต่อบาน)</div>
+      </div>
+      <div class="kpi-card remaining">
+        <div class="num">${fmt(k.remaining)}</div>
+        <div class="label">ยังไม่เคยตรวจ</div>
+      </div>
+    </div>
+
+    <div class="overdue-banner" onclick="toggleOverdue()">
+      <div class="left">⚠️ บานที่เกินกำหนดตรวจ (เกิน ${overdue.days} วัน หรือยังไม่เคยตรวจ)
+        <span class="count">${fmt(overdue.count)}</span>
+      </div>
+      <span class="toggle" id="overdueArrow">▼</span>
+    </div>
+    <div class="overdue-list" id="overdueList">
+      ${overdue.list.length ? overdue.list.map(o => `
+        <div class="overdue-row">
+          <div>
+            <div>${o.code}</div>
+            <div class="meta">ชั้น ${o.floor}${o.zone?" · โซน "+o.zone:""}${o.lastDate?" · ตรวจล่าสุด "+fmtDateTime(o.lastDate):""}</div>
+          </div>
+          <div class="reason">${o.reason}</div>
+        </div>
+      `).join("") : `<div class="empty-note">ไม่มีบานที่เกินกำหนด</div>`}
     </div>
 
     <div class="card">
-      <h2>แยกงานซ่อมตามผู้รับผิดชอบ</h2>
+      <h2>แยกงานซ่อมตามผู้รับผิดชอบ (จากบานที่ชำรุด)</h2>
       <div class="split-row">
         <div class="split contractor">
           <span class="tag">ผู้รับเหมาซ่อม</span>
-          <div><span class="big">${fmt(contractorItems)}</span><span class="unit">รายการ</span></div>
-          <div class="sub">ต้องรอผู้รับเหมา <b>${fmt(doorsNeedContractor)}</b> บาน</div>
+          <div><span class="big">${fmt(s.contractorItems)}</span><span class="unit">รายการ</span></div>
+          <div class="sub">ต้องรอผู้รับเหมา <b>${fmt(s.doorsNeedContractor)}</b> บาน</div>
         </div>
         <div class="split stb">
           <span class="tag">ช่างบริษัท STB</span>
-          <div><span class="big">${fmt(stbItems)}</span><span class="unit">รายการ</span></div>
-          <div class="sub">STB ซ่อมได้เองครบ <b>${fmt(doorsStbOnly)}</b> บาน</div>
+          <div><span class="big">${fmt(s.stbItems)}</span><span class="unit">รายการ</span></div>
+          <div class="sub">STB ซ่อมได้เองครบ <b>${fmt(s.doorsStbOnly)}</b> บาน</div>
         </div>
       </div>
-      <div class="legend">
-        รวมรายการชำรุดทั้งหมด ${fmt(totalItems)} รายการ
-        <br>
-        <span class="dot red"></span>งานผู้รับเหมา: บานพับ/ซีลประตู, ชุดแม่เหล็กเดือยยึด, โช๊คอัฟ, คิ้วกันไฟ, ก้านโช๊คอัฟตัวจัดลำดับ
-        <br>
-        <span class="dot blue"></span>งาน STB: การปิด-เปิดประตู, คราบน้ำมันที่ประตู, สลักล็อกบานประตู
-      </div>
     </div>
+
+    <div class="list-head">
+      <h2>📋 บานที่ตรวจแล้ว</h2>
+      <span class="badge" id="recentCount">0</span>
+    </div>
+    <div id="recentListWrap"></div>
   `;
+  renderAll();
 }
 
 async function loadDashboard(){
