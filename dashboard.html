@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>แดชบอร์ด Fire Compartment Door</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0e2a3d;
+    --navy-2:#123a52;
+    --teal:#0f7a72;
+    --teal-light:#e6f4f2;
+    --amber:#c8791a;
+    --amber-light:#fbeee0;
+    --red:#b7362f;
+    --red-light:#fbeceb;
+    --blue:#1e5fa8;
+    --blue-light:#e8f0fb;
+    --paper:#f7f5f0;
+    --line:#dcd8cd;
+    --ink:#1b1f22;
+    --muted:#6b7178;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Sarabun',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding-bottom:40px;
+  }
+  .topbar{
+    background:var(--navy);
+    color:#fff;
+    padding:18px 18px 16px;
+    position:sticky;
+    top:0;
+    z-index:10;
+  }
+  .topbar h1{margin:0;font-size:17px;font-weight:700;}
+  .topbar .sub{font-size:12.5px;color:#b9c6d1;margin-top:3px;}
+  .wrap{max-width:760px;margin:0 auto;padding:16px;}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin-bottom:14px;
+  }
+  .card h2{margin:0 0 12px;font-size:15px;color:var(--navy);font-weight:700;}
+  .card .note{font-size:12px;color:var(--muted);margin-top:2px;}
+
+  .kpi-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .kpi{
+    flex:1;min-width:100px;background:var(--teal-light);border-radius:12px;
+    padding:12px 10px;text-align:center;
+  }
+  .kpi .num{font-size:24px;font-weight:700;color:var(--navy);line-height:1.1;}
+  .kpi .label{font-size:12px;color:var(--muted);margin-top:4px;}
+  .kpi.normal{background:var(--teal-light);}
+  .kpi.normal .num{color:var(--teal);}
+  .kpi.damaged{background:var(--amber-light);}
+  .kpi.damaged .num{color:var(--amber);}
+
+  .split-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+  .split{
+    flex:1;min-width:140px;border-radius:12px;padding:12px 14px;border:1px solid transparent;
+  }
+  .split.contractor{background:var(--red-light);border-color:#f0cfcb;}
+  .split.stb{background:var(--blue-light);border-color:#c9dbf2;}
+  .split .tag{font-size:11.5px;font-weight:700;letter-spacing:.2px;margin-bottom:6px;display:inline-block;
+    padding:2px 8px;border-radius:20px;}
+  .split.contractor .tag{background:var(--red);color:#fff;}
+  .split.stb .tag{background:var(--blue);color:#fff;}
+  .split .big{font-size:26px;font-weight:700;}
+  .split.contractor .big{color:var(--red);}
+  .split.stb .big{color:var(--blue);}
+  .split .unit{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px;}
+  .split .sub{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .split .sub b{color:var(--ink);}
+
+  .legend{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.7;}
+  .legend .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;margin-right:3px;position:relative;top:-1px;}
+  .legend .dot.red{background:var(--red);}
+  .legend .dot.blue{background:var(--blue);}
+
+  .state{text-align:center;padding:40px 10px;color:var(--muted);font-size:14px;}
+  .state .spinner{
+    width:26px;height:26px;border-radius:50%;border:3px solid var(--line);
+    border-top-color:var(--teal);animation:spin .8s linear infinite;margin:0 auto 12px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .retry-btn{
+    margin-top:12px;background:var(--teal);color:#fff;border:none;border-radius:10px;
+    padding:9px 18px;font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;
+  }
+  .refresh-link{font-size:12.5px;color:var(--teal);cursor:pointer;font-weight:600;}
+  .card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+  .card-head h2{margin:0;}
+  .updated{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🗺️ แดชบอร์ด Fire Compartment Door</h1>
+  <div class="sub">ภาพรวมการตรวจเช็กและงานซ่อม</div>
+</div>
+
+<div class="wrap" id="app">
+  <div class="state">
+    <div class="spinner"></div>
+    กำลังโหลดข้อมูล...
+  </div>
+</div>
+
+<script>
+// ใช้ GAS_URL เดียวกับแอพตรวจเช็กหลัก (index.html)
+const CONFIG = {
+  GAS_URL: "https://script.google.com/macros/s/AKfycbytuDfSoZb1rAq2gtqOr5uA6AkhYv7ivxB_kY7UwKtCreS2mb3HzGoCNN3gWz5AQrbs/exec"
+};
+
+const app = document.getElementById("app");
+
+function renderError(msg){
+  app.innerHTML = `
+    <div class="state">
+      ไม่สามารถโหลดข้อมูลได้<br>
+      <span style="font-size:12.5px;">${msg || ""}</span>
+      <div><button class="retry-btn" onclick="loadDashboard()">ลองใหม่</button></div>
+    </div>
+  `;
+}
+
+function fmt(n){ return (n===undefined||n===null) ? "-" : n.toLocaleString("th-TH"); }
+
+function renderDashboard(data){
+  const s = data.summary || data; // เผื่อ endpoint ส่ง summary ตรงๆ โดยไม่ห่อ key summary
+  const total = s.totalDoors || 0;
+  const normal = s.normalDoors || 0;
+  const damaged = s.damagedDoors || 0;
+  const totalItems = s.totalItems || 0;
+  const contractorItems = s.contractorItems || 0;
+  const stbItems = s.stbItems || 0;
+  const doorsNeedContractor = s.doorsNeedContractor || 0;
+  const doorsStbOnly = s.doorsStbOnly || 0;
+  const now = new Date().toLocaleString("th-TH");
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <h2>ภาพรวมจำนวนบาน</h2>
+        <span class="refresh-link" onclick="loadDashboard()">↻ รีเฟรช</span>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="num">${fmt(total)}</div>
+          <div class="label">มีข้อมูลตรวจแล้ว (บาน)</div>
+        </div>
+        <div class="kpi normal">
+          <div class="num">${fmt(normal)}</div>
+          <div class="label">ปกติ</div>
+        </div>
+        <div class="kpi damaged">
+          <div class="num">${fmt(damaged)}</div>
+          <div class="label">ชำรุด</div>
+        </div>
+      </div>
+      <div class="updated">อัปเดตล่าสุด: ${now}</div>
+    </div>
+
+    <div class="card">
+      <h2>แยกงานซ่อมตามผู้รับผิดชอบ</h2>
+      <div class="split-row">
+        <div class="split contractor">
+          <span class="tag">ผู้รับเหมาซ่อม</span>
+          <div><span class="big">${fmt(contractorItems)}</span><span class="unit">รายการ</span></div>
+          <div class="sub">ต้องรอผู้รับเหมา <b>${fmt(doorsNeedContractor)}</b> บาน</div>
+        </div>
+        <div class="split stb">
+          <span class="tag">ช่างบริษัท STB</span>
+          <div><span class="big">${fmt(stbItems)}</span><span class="unit">รายการ</span></div>
+          <div class="sub">STB ซ่อมได้เองครบ <b>${fmt(doorsStbOnly)}</b> บาน</div>
+        </div>
+      </div>
+      <div class="legend">
+        รวมรายการชำรุดทั้งหมด ${fmt(totalItems)} รายการ
+        <br>
+        <span class="dot red"></span>งานผู้รับเหมา: บานพับ/ซีลประตู, ชุดแม่เหล็กเดือยยึด, โช๊คอัฟ, คิ้วกันไฟ, ก้านโช๊คอัฟตัวจัดลำดับ
+        <br>
+        <span class="dot blue"></span>งาน STB: การปิด-เปิดประตู, คราบน้ำมันที่ประตู, สลักล็อกบานประตู
+      </div>
+    </div>
+  `;
+}
+
+async function loadDashboard(){
+  app.innerHTML = `<div class="state"><div class="spinner"></div>กำลังโหลดข้อมูล...</div>`;
+  try{
+    const url = CONFIG.GAS_URL + (CONFIG.GAS_URL.indexOf("?")>-1 ? "&" : "?") + "action=dashboard";
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderDashboard(data);
+  }catch(err){
+    renderError(err.message);
+  }
+}
+
+loadDashboard();
+</script>
+</body>
+</html>
