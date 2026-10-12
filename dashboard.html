@@ -88,6 +88,21 @@ header.top .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,
 .hist{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .hist span{font-size:12px;border-radius:8px;padding:2px 8px}
 .hist .pass{background:var(--teal-bg);color:var(--teal)} .hist .fail{background:var(--red-bg);color:var(--red)}
+.rtabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0 8px}
+.rtabs button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
+.rtabs button.on.con{background:var(--red);color:#fff;border-color:var(--red)}
+.rtabs button.on.stb{background:var(--blue);color:#fff;border-color:var(--blue)}
+.rtabs label{margin-left:auto;font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.tblwrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table.rt{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+table.rt th{background:#f1efe9;text-align:left;padding:8px 10px;white-space:nowrap}
+table.rt td{padding:8px 10px;border-top:1px solid #eee;vertical-align:top}
+table.rt tr.done td{color:#8a9aa8;text-decoration:line-through}
+table.rt tr.clk{cursor:pointer} table.rt tr.clk:hover td{background:#faf8f3}
+.split>div{cursor:pointer}
+.st{display:inline-block;border-radius:999px;padding:0 9px;font-size:11px;font-weight:600;white-space:nowrap;text-decoration:none}
+.st.w{background:var(--amber-bg);color:var(--amber)} .st.d{background:var(--teal-bg);color:var(--teal)}
+@media print{.rtabs button,.rtabs label{display:none !important}.rtabs{display:block}.tblwrap{overflow:visible}table.rt{min-width:0}}
 @media (max-width:720px){
   .kpis{grid-template-columns:repeat(2,1fr)} .split{grid-template-columns:1fr} .photos{grid-template-columns:repeat(2,1fr)}
 }
@@ -146,6 +161,13 @@ header.top .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,
       <div class="con"><span class="tag">ผู้รับเหมาซ่อม</span><div class="n" id="conN">0 <small style="display:inline;font-size:13px;font-weight:400">รายการ</small></div><small id="conD">ต้องรอผู้รับเหมา 0 บาน</small></div>
       <div class="stb"><span class="tag">ช่างบริษัท STB</span><div class="n" id="stbN">0 <small style="display:inline;font-size:13px;font-weight:400">รายการ</small></div><small id="stbD">STB ซ่อมได้เองครบ 0 บาน</small></div>
     </div>
+    <div class="rtabs" id="rtabs">
+      <button type="button" data-o="con" class="con on" id="tabCon">ผู้รับเหมา (ผรม.) <b id="tabConN">0</b></button>
+      <button type="button" data-o="stb" class="stb" id="tabStb">ช่าง STB <b id="tabStbN">0</b></button>
+      <button type="button" class="btn ghost" id="csvBtn">⬇ ดาวน์โหลด Excel (CSV)</button>
+      <label><input type="checkbox" id="showDone"> แสดงรายการที่แก้ไขแล้ว</label>
+    </div>
+    <div class="tblwrap"><div id="repairTbl"></div></div>
   </div>
 
   <div class="sec">📋 ประตูที่ตรวจแล้ว <span class="pill" id="doneCnt">0</span></div>
@@ -183,7 +205,7 @@ function dkey(r){ const d=(r.inspDate||"").slice(0,10); return /^\d{4}-\d{2}-\d{
 function toDate(k){ const p=k.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
 function fmtDay(k){ if(!k) return "-"; const p=k.split("-"); return +p[2]+"/"+(+p[1])+"/"+(+p[0]+543); }
 function fmtTs(t){ if(!t) return "-"; const m=t.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/); return m ? (+m[3])+"/"+(+m[2])+"/"+(+m[1]+543)+" "+m[4]+":"+m[5] : t; }
-function isBad(r){ return ITEMS.some(i => r.items && r.items[i.key] && r.items[i.key].status==="ผิดปกติ"); }
+function isBad(r){ return ITEMS.some(i => r.items && r.items[i.key] && r.items[i.key].status==="ผิดปกติ") || !!(r.items && r.items.extra && r.items.extra.status==="ผิดปกติ"); }
 
 function periodRange(){
   const d = toDate(state.date||todayStr());
@@ -238,18 +260,31 @@ function compute(){
   });
   overdue.sort((a,b)=> (a.days===null?-1:b.days===null?1:b.days-a.days));
 
-  // แยกงานซ่อม
-  let con=0, stb=0, doorsCon=0, doorsStbOnly=0;
+  // แยกงานซ่อม: รายการข้อผิดปกติของแต่ละบาน (ล่าสุดในช่วงที่เลือก) พร้อมผู้รับผิดชอบ
+  const repairs = [];
   fails.forEach(r=>{
-    let c=0,s=0;
-    ITEMS.forEach(i=>{ if (r.items[i.key] && r.items[i.key].status==="ผิดปกติ"){ i.owner==="con"?c++:s++; } });
-    con+=c; stb+=s; if(c>0) doorsCon++; else if(s>0) doorsStbOnly++;
+    ITEMS.forEach(i=>{
+      const it = r.items[i.key];
+      if (!it || it.status!=="ผิดปกติ") return;
+      // ถือว่า "แก้ไขแล้ว" เมื่อมีงานซ่อมบำรุงของบานนี้ วันที่ไม่ก่อนวันตรวจ และระบุการแก้ไขในหัวข้อนี้
+      const fixed = DATA.maintenance.some(m => m.code===r.code && dkey(m) >= dkey(r) && m.notes && m.notes[i.key]);
+      repairs.push({code:r.code, floor:r.floor, zone:r.zone, inspector:r.inspector, date:dkey(r), ts:r.ts,
+        key:i.key, label:i.label, owner:i.owner, reason:it.reason||"", photo:it.photo||"", fixed});
+    });
   });
+  const fo = f => { const k=FLOOR_ORDER.indexOf(String(f)); return k<0?99:k; };
+  repairs.sort((a,b)=> fo(a.floor)-fo(b.floor) || a.code.localeCompare(b.code,"en",{numeric:true}));
+  const pend = repairs.filter(x=>!x.fixed);
+  const conP = pend.filter(x=>x.owner==="con"), stbP = pend.filter(x=>x.owner==="stb");
+  const con = conP.length, stb = stbP.length;
+  const conDoors = new Set(conP.map(x=>x.code)), stbDoors = new Set(stbP.map(x=>x.code));
+  const doorsCon = conDoors.size;
+  let doorsStbOnly = 0; stbDoors.forEach(c=>{ if(!conDoors.has(c)) doorsStbOnly++; });
 
   const mts = DATA.maintenance.filter(m => set.has(m.code) && inRange(dkey(m), rng))
     .sort((a,b)=> (dkey(b)+(b.ts||"")).localeCompare(dkey(a)+(a.ts||"")));
 
-  return {doors, done, fails, overdue, con, stb, doorsCon, doorsStbOnly, mts};
+  return {doors, done, fails, overdue, con, stb, doorsCon, doorsStbOnly, mts, repairs};
 }
 
 function render(){
@@ -271,6 +306,11 @@ function render(){
   document.getElementById("conD").textContent = "ต้องรอผู้รับเหมา "+R.doorsCon+" บาน";
   document.getElementById("stbD").textContent = "STB ซ่อมได้เองครบ "+R.doorsStbOnly+" บาน";
 
+  window.__repairs = R.repairs;
+  document.getElementById("tabConN").textContent = R.con;
+  document.getElementById("tabStbN").textContent = R.stb;
+  renderRepairs();
+
   document.getElementById("doneCnt").textContent = R.done.length;
   document.getElementById("doneList").innerHTML = R.done.length ? R.done.map(r=>{
     const bad = isBad(r);
@@ -282,6 +322,38 @@ function render(){
     `<div class="row" data-mt="${i}"><div><b>${esc(m.code)}</b><small>ชั้น ${esc(m.floor)} · ผู้ตรวจสอบ: ${esc(m.inspector)} · ${fmtDay(dkey(m))}${m.detail?" · "+esc(m.detail).slice(0,60):""}</small></div><span class="chip wait">ซ่อมบำรุง</span></div>`).join("")
     : `<div class="empty">ไม่มีงานซ่อมบำรุงในช่วงนี้</div>`;
   window.__mts = R.mts;
+}
+
+
+let repairOwner = "con";
+function repairRows(){
+  const showDone = document.getElementById("showDone").checked;
+  return (window.__repairs||[]).filter(x=>x.owner===repairOwner && (showDone || !x.fixed));
+}
+function renderRepairs(){
+  document.getElementById("tabCon").classList.toggle("on", repairOwner==="con");
+  document.getElementById("tabStb").classList.toggle("on", repairOwner==="stb");
+  const rows = repairRows();
+  const box = document.getElementById("repairTbl");
+  if (!rows.length){ box.innerHTML = `<div class="empty">ไม่มีรายการที่ต้องแก้ไขในช่วง/ตัวกรองนี้</div>`; return; }
+  box.innerHTML = `<table class="rt"><thead><tr><th>#</th><th>รหัสประตู</th><th>ชั้น / โซน</th><th>หัวข้อที่ต้องแก้ไข</th><th>อาการ / เหตุผล</th><th>ผู้ตรวจ</th><th>วันที่ตรวจ</th><th>สถานะ</th><th>รูป</th></tr></thead><tbody>`
+    + rows.map((x,n)=>{
+      const id = driveId(x.photo);
+      return `<tr class="clk${x.fixed?" done":""}" data-code="${esc(x.code)}" data-ts="${esc(x.ts)}"><td>${n+1}</td><td><b>${esc(x.code)}</b></td><td>${esc(x.floor)}${x.zone?" · "+esc(x.zone):""}</td><td>${esc(x.label)}</td><td>${esc(x.reason)||"-"}</td><td>${esc(x.inspector)}</td><td>${fmtDay(x.date)}</td><td><span class="st ${x.fixed?"d":"w"}">${x.fixed?"แก้ไขแล้ว":"รอซ่อม"}</span></td><td>${id?`<a class="st d" style="background:#e6eefa;color:#1f5fa8" href="${esc(x.photo)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">ดูรูป</a>`:""}</td></tr>`;
+    }).join("") + `</tbody></table>`;
+}
+function downloadCsv(){
+  const label = repairOwner==="con" ? "ผู้รับเหมา (ผรม.)" : "ช่างบริษัท STB";
+  const rows = repairRows();
+  const q = v => '"' + String(v==null?"":v).replace(/"/g,'""') + '"';
+  const head = ["ลำดับ","ผู้รับผิดชอบ","รหัสประตู","ชั้น","โซน","หัวข้อที่ต้องแก้ไข","อาการ/เหตุผล","ผู้ตรวจ","วันที่ตรวจ","สถานะ","ลิงก์รูป"];
+  const lines = [head.map(q).join(",")].concat(rows.map((x,n)=>[n+1,label,x.code,x.floor,x.zone,x.label,x.reason,x.inspector,x.date,x.fixed?"แก้ไขแล้ว":"รอซ่อม",x.photo].map(q).join(",")));
+  const blob = new Blob(["\ufeff" + lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "FCD_ต้องแก้ไข_" + (repairOwner==="con"?"ผรม":"STB") + "_" + todayStr() + ".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
 }
 
 // ---------- รูป Drive ----------
@@ -301,8 +373,9 @@ function openDoor(code, ts){
   const hist = DATA.inspections.filter(x=>x.code===code).sort((a,b)=>(dkey(b)+b.ts).localeCompare(dkey(a)+a.ts)).slice(0,12);
   const mts = DATA.maintenance.filter(m=>m.code===code).sort((a,b)=>(dkey(b)+b.ts).localeCompare(dkey(a)+a.ts));
   let photos = "";
-  ITEMS.forEach(i=>{ const it=r.items[i.key]; if (it && it.photo) photos += photoHtml(it.photo, i.label); });
-  const rows = ITEMS.map(i=>{
+  const ALL = r.items.extra ? ITEMS.concat([{key:"extra",label:"หัวข้อเพิ่มเติม (ฟอร์มรุ่นแรก)",owner:""}]) : ITEMS;
+  ALL.forEach(i=>{ const it=r.items[i.key]; if (it && it.photo) photos += photoHtml(it.photo, i.label); });
+  const rows = ALL.map(i=>{
     const it = r.items[i.key] || {};
     const bad = it.status==="ผิดปกติ";
     return `<div class="kv"><span>${esc(i.label)}</span><span class="${bad?"bad":it.status?"good":""}">${esc(it.status||"-")}${bad&&it.reason?`<small>${esc(it.reason)}</small>`:""}</span></div>`;
@@ -366,6 +439,12 @@ function buildFilters(){
   fs.value = fv; zs.value = zv;
 }
 
+document.getElementById("rtabs").addEventListener("click", e=>{ const b=e.target.closest("button[data-o]"); if(b){ repairOwner=b.dataset.o; renderRepairs(); } });
+document.querySelector(".split .con").addEventListener("click", ()=>{ repairOwner="con"; renderRepairs(); });
+document.querySelector(".split .stb").addEventListener("click", ()=>{ repairOwner="stb"; renderRepairs(); });
+document.getElementById("showDone").addEventListener("change", renderRepairs);
+document.getElementById("csvBtn").addEventListener("click", downloadCsv);
+document.getElementById("repairTbl").addEventListener("click", e=>{ const r=e.target.closest("tr[data-code]"); if(r) openDoor(r.dataset.code, r.dataset.ts); });
 document.getElementById("dateIn").value = state.date;
 document.getElementById("period").addEventListener("click", e=>{
   const b = e.target.closest("button[data-p]"); if(!b) return;
